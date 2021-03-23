@@ -1,0 +1,11 @@
+[package]
+name = "shift-lib-rs-general"
+version = "0.1.0"
+edition = "2018"
+license = "CC0-1.0"
+repository = ""
+keywords = ["competitive"]
+publish = false
+
+[lib]
+name = "shift_general"
