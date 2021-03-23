@@ -1,3 +1,5 @@
+extern crate num_traits;
+
 pub use self::iter_ext::*;
 
 mod iter_ext {
@@ -93,7 +95,7 @@ impl<T> IntoIterator for AccumulateArray<T> {
     }
 }
 trait IteratorExt: Iterator {
-    pub fn scanl<St, B, F: FnMut(&St, Self::Item) -> St>(
+    fn scanl<St, B, F: FnMut(&St, Self::Item) -> St>(
         self,
         initial_state: St,
         f: F,
@@ -103,7 +105,7 @@ trait IteratorExt: Iterator {
     {
         Scanl::new(self, initial_state, f)
     }
-    pub fn accumulate(self) -> Accumulate<Self>
+    fn accumulate(self) -> Accumulate<Self>
     where
         Self: Sized + Iterator,
         Self::Item: std::ops::Add<Self, Output = Self>
