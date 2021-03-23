@@ -1,5 +1,5 @@
 [package]
-name = "shift-lib-rs-iter"
+name = "shift-lib-rs-iter-ext"
 version = "0.1.0"
 edition = "2018"
 license = "CC0-1.0"
@@ -8,4 +8,4 @@ keywords = ["competitive"]
 publish = false
 
 [lib]
-name = "shift_iter"
+name = "shift_iter_ext"
