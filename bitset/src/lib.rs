@@ -4,7 +4,7 @@ mod bitset {
 
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct Bitset(usize);
-    struct BitsetRangeIter {
+    pub struct BitsetRangeIter {
         start: usize,
         end: usize,
         cur: Option<usize>,
@@ -16,7 +16,7 @@ mod bitset {
         }
     }
 
-    struct BitsetRange {
+    pub struct BitsetRange {
         start: usize,
         end: usize,
     }
