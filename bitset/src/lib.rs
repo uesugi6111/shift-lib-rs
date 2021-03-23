@@ -3,7 +3,7 @@ pub use self::bitset::*;
 mod bitset {
 
     #[derive(Copy, Clone, Eq, PartialEq)]
-    struct Bitset(usize);
+    pub struct Bitset(usize);
     struct BitsetRangeIter {
         start: usize,
         end: usize,
@@ -11,7 +11,7 @@ mod bitset {
     }
 
     impl BitsetRangeIter {
-        fn gen(n: usize) -> Self {
+        pub fn gen(n: usize) -> Self {
             Bitset((1 << n) - 1).subsets()
         }
     }
@@ -40,7 +40,7 @@ mod bitset {
         }
     }
 
-    struct BitsetIter {
+    pub struct BitsetIter {
         val: usize,
         cur: Option<usize>,
     }
@@ -109,41 +109,41 @@ mod bitset {
     }
 
     impl Bitset {
-        fn elem(&self, i: usize) -> bool {
+        pub fn elem(&self, i: usize) -> bool {
             (self.0 >> i) & 1 == 1
         }
-        fn insert(&mut self, i: usize) {
+        pub fn insert(&mut self, i: usize) {
             self.0 |= 1 << i;
         }
 
-        fn empty() -> Self {
+        pub fn empty() -> Self {
             Bitset(0)
         }
-        fn iter(&self) -> BitsetIter {
+        pub fn iter(&self) -> BitsetIter {
             BitsetIter {
                 val: self.0,
                 cur: Some((self.0 as i32 & (-(self.0 as i32))) as usize),
             }
         }
-        fn intersection(&self, other: &Self) -> Self {
+        pub fn intersection(&self, other: &Self) -> Self {
             Self(self.0 & other.0)
         }
-        fn union(&self, other: &Self) -> Self {
+        pub fn union(&self, other: &Self) -> Self {
             Self(self.0 | other.0)
         }
-        fn xor(&self, other: &Self) -> Self {
+        pub fn xor(&self, other: &Self) -> Self {
             Self(self.0 ^ other.0)
         }
-        fn diff(&self, other: &Self) -> Self {
+        pub fn diff(&self, other: &Self) -> Self {
             self.xor(other).intersection(self)
         }
-        fn subsets(&self) -> BitsetRangeIter {
+        pub fn subsets(&self) -> BitsetRangeIter {
             BitsetRange::from(Bitset::empty()..=*self).iter()
         }
-        fn gen(n: usize) -> Self {
+        pub fn gen(n: usize) -> Self {
             Self((1 << n) - 1)
         }
-        fn singleton(n: usize) -> Self {
+        pub fn singleton(n: usize) -> Self {
             Self(1 << n)
         }
     }
