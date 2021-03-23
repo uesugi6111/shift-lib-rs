@@ -1,15 +1,15 @@
+
 pub use self::rangeset::*;
-use std::collections::BTreeSet;
 mod rangeset {
     pub struct RangeSet {
-        s: BTreeSet<(i64, i64)>,
+        s: std::collections::BTreeSet<(i64, i64)>,
         cnt: usize,
     }
     
     impl RangeSet {
         pub fn new() -> Self {
             RangeSet {
-                s: BTreeSet::new(),
+                s: std::collections::BTreeSet::new(),
                 cnt: 0,
             }
         }
@@ -22,7 +22,7 @@ mod rangeset {
                 x
             }
         }
-        pub fn insert(&mut self, range: Range<i64>) {
+        pub fn insert(&mut self, range: std::ops::Range<i64>) {
             let (mut l, mut r) = (range.start, range.end);
             if l >= r {
                 return;
@@ -88,7 +88,7 @@ mod rangeset {
                 Some(v)
             }
         }
-        pub fn remove(&mut self, range: Range<i64>) {
+        pub fn remove(&mut self, range: std::ops::Range<i64>) {
             let (l, r) = (range.start, range.end);
             if let Some(&(l1, r1)) = self.prev((l, std::i64::MAX)) {
                 // l1 <= l
