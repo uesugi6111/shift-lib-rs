@@ -1,14 +1,23 @@
 pub use self::general::*;
-
+#[macro_use]
 mod general {
-    pub trait Assign: Ord + Copy {
-        fn min_assign(&mut self, x: Self) {
-            *self = (*self).min(x);
-        }
-        fn max_assign(&mut self, x: Self) {
-            *self = (*self).max(x);
-        }
+    macro_rules! max_assign {
+        ($left:expr,$right:expr) => {
+            if $left < $right {
+                $left = $right;
+            }
+        };
     }
-    impl<T:Ord + Copy> Assign for T {}
+    macro_rules! min_assign {
+        ($left:expr,$right:expr) => {
+            if $left > $right {
+                $left = $right;
+            }
+        };
+    }
 }
 
+#[test]
+fn test() {
+    let mut v = vec![1, 2, 3, 4, 5];
+}
