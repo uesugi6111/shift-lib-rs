@@ -1,11 +1,10 @@
-
 pub use self::rangeset::*;
 mod rangeset {
     pub struct RangeSet {
         s: std::collections::BTreeSet<(i64, i64)>,
         cnt: usize,
     }
-    
+
     impl RangeSet {
         pub fn new() -> Self {
             RangeSet {
@@ -13,7 +12,7 @@ mod rangeset {
                 cnt: 0,
             }
         }
-    
+
         // x 以上であって self に含まれない最小の元を返す
         pub fn mex(&self, x: i64) -> i64 {
             if let Some(&(_, u)) = self.prev((x + 1, x + 1)) {
@@ -105,5 +104,4 @@ mod rangeset {
             };
         }
     }
-    
 }

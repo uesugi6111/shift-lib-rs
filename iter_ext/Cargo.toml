@@ -9,3 +9,9 @@ publish = false
 
 [lib]
 name = "shift_iter_ext"
+
+[dependencies]
+num-traits = "=0.2.11"
+
+[dev-dependencies]
+num-traits = "=0.2.11"

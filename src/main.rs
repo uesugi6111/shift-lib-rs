@@ -1,5 +1,5 @@
 use proconio::input;
-
+extern crate num_traits;
 fn main() {
     input! {
         n:usize,
@@ -7,118 +7,111 @@ fn main() {
     }
     let v = v;
 }
-
-struct Scanl<I: Iterator, St, F: FnMut(&St, I::Item) -> St> {
-    iter: I,
-    state: Option<St>,
-    f: F,
-}
-
-struct Accumulate<I: Iterator> {
-    iter: I,
-    state: Option<I::Item>,
-}
-
-impl<I: Iterator> Accumulate<I>
-where
-    I::Item: num_traits::Zero,
-{
-    fn new(iter: I) -> Self {
-        Self {
-            iter,
-            state: Some(num_traits::zero()),
+pub use self::rangeset::*;
+mod rangeset {
+    pub struct RangeSet {
+        s: std::collections::BTreeSet<(i64, i64)>,
+        cnt: usize,
+    }
+    
+    impl RangeSet {
+        pub fn new() -> Self {
+            RangeSet {
+                s: std::collections::BTreeSet::new(),
+                cnt: 0,
+            }
+        }
+    
+        // x 以上であって self に含まれない最小の元を返す
+        pub fn mex(&self, x: i64) -> i64 {
+            if let Some(&(_, u)) = self.prev((x + 1, x + 1)) {
+                u
+            } else {
+                x
+            }
+        }
+        pub fn insert(&mut self, range: std::ops::Range<i64>) {
+            let (mut l, mut r) = (range.start, range.end);
+            if l >= r {
+                return;
+            }
+            let mut l1 = std::i64::MIN;
+            let mut r1 = std::i64::MIN;
+            if let Some(&(_l, _r)) = self.prev((l, r)) {
+                l1 = _l;
+                r1 = _r;
+            }
+            if l1 <= l && r <= r1 {
+                // [l1..l..r..r1)
+                return;
+            }
+            if l1 <= l && l <= r1 {
+                // [l1..l..r1..r)
+                l = l1;
+                if let Some(&(l2, r2)) = self.next((l1, r1)) {
+                    self.s.remove(&(l1, r1));
+                    self.cnt -= (r1 - l1) as usize;
+                    l1 = l2;
+                    r1 = r2;
+                };
+            } else {
+                if let Some(&(l2, r2)) = self.next((l1, r1)) {
+                    l1 = l2;
+                    r1 = r2;
+                } else {
+                    l1 = std::i64::MAX;
+                    r1 = std::i64::MAX;
+                };
+            }
+            while r > r1 {
+                if let Some(&(l2, r2)) = self.next((l1, r1)) {
+                    self.s.remove(&(l1, r1));
+                    self.cnt -= (r1 - l1) as usize;
+                    l1 = l2;
+                    r1 = r2;
+                } else {
+                    self.s.remove(&(l1, r1));
+                    self.cnt -= (r1 - l1) as usize;
+                    l1 = std::i64::MAX;
+                    r1 = std::i64::MAX;
+                };
+            }
+            if l1 <= r {
+                self.s.remove(&(l1, r1));
+                self.cnt -= (r1 - l1) as usize;
+                r = r1;
+            }
+            self.s.insert((l, r));
+            self.cnt += (r - l) as usize;
+        }
+        pub fn prev(&self, u: (i64, i64)) -> Option<&(i64, i64)> {
+            self.s.range(..=u).next_back()
+        }
+        pub fn next(&self, u: (i64, i64)) -> Option<&(i64, i64)> {
+            let mut itr = self.s.range(u..);
+            let v = itr.next()?;
+            if *v == u {
+                itr.next()
+            } else {
+                Some(v)
+            }
+        }
+        pub fn remove(&mut self, range: std::ops::Range<i64>) {
+            let (l, r) = (range.start, range.end);
+            if let Some(&(l1, r1)) = self.prev((l, std::i64::MAX)) {
+                // l1 <= l
+                assert!(r <= r1);
+                // [l1..l..r..r1) -> [l1..l) + [r..r1)
+                self.s.remove(&(l1, r1));
+                if l1 < l {
+                    self.s.insert((l1, l));
+                }
+                if r < r1 {
+                    self.s.insert((r, r1));
+                }
+                self.cnt -= (r - l) as usize;
+            };
         }
     }
+    
 }
-
-impl<I> Iterator for Accumulate<I>
-where
-    I: Iterator,
-    I::Item : std::ops::Add<I::Item,Output=I::Item> + Clone
-{
-    type Item = I::Item;
-    fn next(&mut self) -> Option<Self::Item> {
-        let a = self.state.take()?;
-        let ret = a.clone();
-        self.state = self.iter.next().map(|x| a+x);
-        Some(ret)
-    }
-}
-#[derive(Debug)]
-struct AccumulateArray<T>(Vec<T>);
-
-impl<T> AccumulateArray<T>
-where
-    T: std::ops::Add + std::ops::Sub + std::ops::Sub<Output = T> + Copy,
-{
-    // a_l + a_{l+1} + ... + a_{r-1}
-    fn get_sum(&self, range: std::ops::Range<usize>) -> T {
-        let l = range.start;
-        let r = range.end;
-        assert!(l <= r);
-        self.0[r] - self.0[l]
-    }
-}
-
-impl<I, St, F> Iterator for Scanl<I, St, F>
-where
-    I: Iterator<Item = St>,
-    St: Clone,
-    F: FnMut(&St, I::Item) -> St,
-{
-    type Item = St;
-    fn next(&mut self) -> Option<Self::Item> {
-        let a = self.state.take()?;
-        self.state = self.iter.next().map(|x| (self.f)(&a, x));
-        Some(a)
-    }
-}
-
-impl<I: Iterator, St: Sized, F: FnMut(&St, I::Item) -> St> Scanl<I, St, F> {
-    fn new(iter: I, state: St, f: F) -> Scanl<I, St, F> {
-        Scanl {
-            iter,
-            state: Some(state),
-            f,
-        }
-    }
-}
-
-impl<T> std::iter::FromIterator<T> for AccumulateArray<T> {
-    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
-        AccumulateArray(iter.into_iter().collect::<Vec<_>>())
-    }
-}
-
-impl<T> IntoIterator for AccumulateArray<T> {
-    type Item = T;
-
-    type IntoIter = std::vec::IntoIter<T>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        (self.0).into_iter()
-    }
-}
-trait IteratorExt: Iterator {
-    fn scanl<St, B, F: FnMut(&St, Self::Item) -> St>(
-        self,
-        initial_state: St,
-        f: F,
-    ) -> Scanl<Self, St, F>
-    where
-        Self: Sized,
-    {
-        Scanl::new(self, initial_state, f)
-    }
-    fn accumulate(self) -> Accumulate<Self>
-    where
-        Self: Sized + Iterator,
-        Self::Item: std::ops::Add<Self, Output = Self>
-            + std::ops::Sub<Self, Output = Self>
-            + num_traits::Zero,
-    {
-        Accumulate::new(self)
-    }
-}
-
-impl<T: Iterator> IteratorExt for T {}
