@@ -1,0 +1,17 @@
+[package]
+name = "shift-lib-rs-range-set"
+version = "0.1.0"
+edition = "2018"
+license = "CC0-1.0"
+repository = ""
+keywords = ["competitive"]
+publish = false
+
+[lib]
+name = "shift_range_set"
+
+[dependencies]
+alga = "=0.9.3"
+__shift_general = { package = "shift-lib-rs-general", version = "0.1.0", path = "/home/shift/rust_lib/general" }
+__shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "/home/shift/rust_lib/traits" }
+num-traits = "=0.2.11"
