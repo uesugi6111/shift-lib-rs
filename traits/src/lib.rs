@@ -1,6 +1,5 @@
 pub use self::traits::*;
-#[macro_use]
-extern crate alga;
+
 
 mod traits {
     use alga::general::{AbstractMagma, AbstractSemigroup, Additive, Identity, Operator};
