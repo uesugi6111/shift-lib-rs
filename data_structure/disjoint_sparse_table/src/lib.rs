@@ -1,8 +1,7 @@
 pub use self::disjoint_sparse_table::*;
 mod disjoint_sparse_table {
     use __shift_traits::Wrap;
-    use alga::general::{AbstractMagma, AbstractSemigroup};
-    use alga::general::Operator;
+    use alga::general::{AbstractMagma, AbstractSemigroup,Operator};
     use std::marker::PhantomData;
     extern crate __shift_general as general;
     
@@ -69,5 +68,5 @@ mod disjoint_sparse_table {
 
 #[test]
 fn t() {
-    
+
 }

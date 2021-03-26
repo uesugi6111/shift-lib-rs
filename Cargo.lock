@@ -750,12 +750,6 @@ dependencies = [
 [[package]]
 name = "shift-lib-rs-range-set"
 version = "0.1.0"
-dependencies = [
- "alga",
- "num-traits",
- "shift-lib-rs-general",
- "shift-lib-rs-traits",
-]
 
 [[package]]
 name = "shift-lib-rs-traits"
