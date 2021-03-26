@@ -15,9 +15,18 @@ mod general {
             }
         };
     }
+    pub fn ceil_pow2(n: u32) -> u32 {
+        32 - n.saturating_sub(1).leading_zeros()
+    }
+    pub fn msb(n:u32) -> u32 {
+        31 - n.leading_zeros()
+    }
+    
 }
 
 #[test]
 fn test() {
-    let mut v = vec![1, 2, 3, 4, 5];
+    for i in 1..=10 {
+        println!("{} {:?}",ceil_pow2(i),i.next_power_of_two())
+    }
 }

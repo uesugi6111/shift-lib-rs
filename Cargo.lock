@@ -498,9 +498,9 @@ dependencies = [
 
 [[package]]
 name = "proconio"
-version = "0.3.7"
+version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a54fca22947a1cfe40667a61a5de29e2241c557d6e8847e58df48facd9732f06"
+checksum = "3bed4f95f88d84bb8efd51dbc080d463e6ca953f05dfade2e24daf19dd861ccd"
 dependencies = [
  "lazy_static",
  "proconio-derive",
@@ -681,9 +681,13 @@ dependencies = [
  "regex",
  "rustc-hash",
  "shift-lib-rs-bitset",
+ "shift-lib-rs-data-structure",
  "shift-lib-rs-general",
+ "shift-lib-rs-graph",
  "shift-lib-rs-iter-ext",
+ "shift-lib-rs-math",
  "shift-lib-rs-rangeset",
+ "shift-lib-rs-traits",
  "smallvec",
  "superslice",
  "text_io",
@@ -701,8 +705,25 @@ name = "shift-lib-rs-bitset"
 version = "0.1.0"
 
 [[package]]
+name = "shift-lib-rs-data-structure"
+version = "0.1.0"
+dependencies = [
+ "alga",
+ "num-traits",
+ "shift-lib-rs-general",
+]
+
+[[package]]
 name = "shift-lib-rs-general"
 version = "0.1.0"
+
+[[package]]
+name = "shift-lib-rs-graph"
+version = "0.1.0"
+dependencies = [
+ "num-traits",
+ "rustc-hash",
+]
 
 [[package]]
 name = "shift-lib-rs-iter-ext"
@@ -712,8 +733,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "shift-lib-rs-math"
+version = "0.1.0"
+dependencies = [
+ "rustc-hash",
+]
+
+[[package]]
 name = "shift-lib-rs-rangeset"
 version = "0.1.0"
+
+[[package]]
+name = "shift-lib-rs-traits"
+version = "0.1.0"
+dependencies = [
+ "alga",
+ "num-traits",
+ "shift-lib-rs-general",
+]
 
 [[package]]
 name = "sized-chunks"
