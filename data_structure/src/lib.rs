@@ -107,39 +107,42 @@ mod rangeset {
 }
 pub use self::disjoint_sparse_table::*;
 mod disjoint_sparse_table {
-    use alga::general::AbstractSemigroup;
+    use __shift_traits::Wrap;
+    use alga::general::{AbstractMagma, AbstractSemigroup};
     use alga::general::Operator;
     use std::marker::PhantomData;
     extern crate __shift_general as general;
-
+    
     pub struct DisjointSparseTable<T, O>
     where
         O: Operator,
-        T: AbstractSemigroup<O>,
+        Wrap<T>: AbstractSemigroup<O>,
     {
-        table: Vec<Vec<T>>,
+        table: Vec<Vec<Wrap<T>>>,
         _phantom: PhantomData<O>,
     }
     impl<T, O> DisjointSparseTable<T, O>
     where
         O: Operator,
-        T: AbstractSemigroup<O> + Copy,
+        Wrap<T>: AbstractSemigroup<O>,
+        T:Clone
     {
         pub fn new(a: Vec<T>) -> Self {
-            let m = a.len();
+
+            let m = a.len(); 
             let n = general::msb(a.len() as u32) as usize;
-            let mut table = Vec::new();
-            table.push(a);
+            let mut table:Vec<Vec<Wrap<T>>> = Vec::new();
+            table.push(a.iter().cloned().map(Wrap).collect());
             for i in 1..=n {
                 let mut v = Vec::with_capacity(m);
                 for j in (1 << i..m).step_by(1 << (i + 1)) {
-                    v.push(table[0][j - 1]);
+                    v.push(table[0][j - 1].clone());
                     for k in 2..=(1 << i) {
-                        v.push(T::operate(&table[0][j - k], v.last().unwrap()));
+                        v.push(table[0][j - k].operate(v.last().unwrap()));
                     }
-                    v.push(table[0][j]);
+                    v.push(table[0][j].clone());
                     for k in 1..(1 << i).min(m - j) {
-                        v.push(T::operate(v.last().unwrap(), &table[0][j + k]));
+                        v.push(v.last().unwrap().operate(&table[0][j + k]));
                     }
                 }
                 table.push(v);
@@ -153,17 +156,17 @@ mod disjoint_sparse_table {
             let l = range.start;
             let r = range.end - 1;
             if l == r {
-                self.table[0][l]
+                self.table[0][l].clone().0
             } else {
                 let b = general::msb((l ^ r) as u32) as usize;
-                T::operate(&self.table[b][l ^ (1 << b) - 1], &self.table[b][r])
+                self.table[b][l ^ (1 << b) - 1].operate(&self.table[b][r]).0
             }
         }
     }
     impl<T, O> std::fmt::Debug for DisjointSparseTable<T, O>
     where
         O: Operator,
-        T: AbstractSemigroup<O> + Copy + std::fmt::Debug,
+        Wrap<T>: AbstractSemigroup<O> + Copy + std::fmt::Debug,
     {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
             self.table.fmt(f)
@@ -174,7 +177,10 @@ mod disjoint_sparse_table {
 #[test]
 fn test() {
     use alga::general::{Additive,Multiplicative};
-    
-    let dst = disjoint_sparse_table::DisjointSparseTable::<i64,Multiplicative>::new(vec![2, 4, 5]);
-    assert_eq!(dst.query(1..3), 20)
+    use __shift_traits::{Min,Wrap};
+    let mut v = Vec::new();
+    v.push(2);
+    let dst = 
+    disjoint_sparse_table::DisjointSparseTable::<i64,Min>::new(v);
+    //assert_eq!(dst.query(1..3), 20)
 }

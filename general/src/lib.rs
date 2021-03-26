@@ -30,4 +30,5 @@ fn test() {
     for i in 1..=10 {
         println!("{} {:?}", ceil_pow2(i), i.next_power_of_two())
     }
+    max_assign!(1,2);
 }

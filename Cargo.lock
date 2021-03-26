@@ -711,6 +711,7 @@ dependencies = [
  "alga",
  "num-traits",
  "shift-lib-rs-general",
+ "shift-lib-rs-traits",
 ]
 
 [[package]]

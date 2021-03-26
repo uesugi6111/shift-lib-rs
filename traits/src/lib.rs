@@ -1,13 +1,10 @@
 pub use self::traits::*;
 
-
 mod traits {
     use alga::general::{AbstractMagma, AbstractSemigroup, Additive, Identity, Operator};
     #[derive(Clone, Copy)]
-
     pub struct Min;
     #[derive(Clone, Copy)]
-
     pub struct Max;
     impl Operator for Min {
         #[inline]
@@ -147,15 +144,35 @@ mod traits {
         $(impl Identity<$M> for $T { #[inline] fn identity() -> $T {$V} })+
     }
     }
-    impl_ident!(Min;0;u8, u16, u32, u64, u128, usize);
+    /*impl_ident!(Min;0;u8, u16, u32, u64, u128, usize);
     impl_magma!(Min;min;u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
     impl_magma!(Max;max;u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
     impl_semigroup!(<Min> for i8;i16;i32;i64;i128;isize);
     impl_semigroup!(<Max> for u8; u16; u32; u64; u128; usize;i8;i16;i32;i64;i128;isize);
     impl_monoid!(<Min> for u8; u16; u32; u64; u128; usize);
+    */
+    /*impl<T:Ord> AbstractMagma<Min> for T {
+        #[inline]
+        fn operate(&self, right: &Self) -> Self {
+        *self.min(right)
+    }
+    }*/
+
+    #[derive(PartialEq, Clone)]
+    pub struct Wrap<T>(pub T);
+    impl<T: Ord + Copy> AbstractMagma<Min> for Wrap<T> {
+        fn operate(&self, right: &Self) -> Self {
+            Wrap(self.0.min(right.0))
+        }
+    }
+    impl<T: Ord + Copy> AbstractMagma<Max> for Wrap<T> {
+        fn operate(&self, right: &Self) -> Self {
+            Wrap(self.0.max(right.0))
+        }
+    }
+    impl_semigroup!(<Min> for Wrap<T> where T:Ord+Copy);
+    impl_semigroup!(<Max> for Wrap<T> where T:Ord+Copy);
 }
 
 #[test]
-fn t() {
-    1.min(2);
-}
+fn t() {}
