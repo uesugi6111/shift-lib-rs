@@ -177,10 +177,8 @@ mod disjoint_sparse_table {
 #[test]
 fn test() {
     use alga::general::{Additive,Multiplicative};
-    use __shift_traits::{Min,Wrap};
-    let mut v = Vec::new();
-    v.push(2);
+    use __shift_traits::{Min,Max,Wrap};
     let dst = 
-    disjoint_sparse_table::DisjointSparseTable::<i64,Min>::new(v);
-    //assert_eq!(dst.query(1..3), 20)
+    disjoint_sparse_table::DisjointSparseTable::<i64,Additive>::new(vec![2,4,5]);
+    assert_eq!(dst.query(1..3), 9)
 }

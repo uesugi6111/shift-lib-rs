@@ -1,7 +1,9 @@
 pub use self::traits::*;
 
 mod traits {
-    use alga::general::{AbstractMagma, AbstractSemigroup, Additive, Identity, Operator};
+    use alga::general::{
+        AbstractMagma, AbstractMonoid, AbstractSemigroup, Additive, Identity, Operator,
+    };
     #[derive(Clone, Copy)]
     pub struct Min;
     #[derive(Clone, Copy)]
@@ -135,7 +137,6 @@ mod traits {
     });
     macro_rules! impl_monoid(
         (<$M:ty> for $($T:tt)+) => {
-            impl_semigroup!(<$M> for $($T)+);
             impl_marker!(alga::general::AbstractMonoid<$M>; $($T)+);
         }
     );
@@ -160,19 +161,41 @@ mod traits {
 
     #[derive(PartialEq, Clone)]
     pub struct Wrap<T>(pub T);
-    impl<T: Ord + Copy> AbstractMagma<Min> for Wrap<T> {
+    impl<T: Ord + Clone> AbstractMagma<Min> for Wrap<T> {
         fn operate(&self, right: &Self) -> Self {
-            Wrap(self.0.min(right.0))
+            Wrap(self.0.clone().min(right.0.clone()))
         }
     }
-    impl<T: Ord + Copy> AbstractMagma<Max> for Wrap<T> {
+    impl<T: Ord + Clone> AbstractMagma<Max> for Wrap<T> {
         fn operate(&self, right: &Self) -> Self {
-            Wrap(self.0.max(right.0))
+            Wrap(self.0.clone().max(right.0.clone()))
         }
     }
-    impl_semigroup!(<Min> for Wrap<T> where T:Ord+Copy);
-    impl_semigroup!(<Max> for Wrap<T> where T:Ord+Copy);
+    impl<T: std::ops::Add<Output = T> + Clone> AbstractMagma<Additive> for Wrap<T> {
+        fn operate(&self, right: &Self) -> Self {
+            let l = self.0.clone();
+            let r = right.0.clone();
+            let a = l+r;
+            Wrap(a)
+        }
+    }
+    impl_semigroup!(<Min> for Wrap<T> where T:Ord+Clone);
+    impl_semigroup!(<Max> for Wrap<T> where T:Ord+Clone);
+    impl_semigroup!(<Additive> for Wrap<T> where T:std::ops::Add<Output=T>+Clone + PartialEq);
+    impl<T> Identity<Additive> for Wrap<T>
+    where
+        T: std::ops::Add + num_traits::Zero,
+    {
+        fn identity() -> Self {
+            Wrap(num_traits::zero())
+        }
+    }
+    impl_monoid!(<Additive> for Wrap<T> where T:num_traits::Zero ,Wrap<T> : AbstractSemigroup<Additive>);
+    
 }
 
 #[test]
-fn t() {}
+fn t() {
+    let x = Wrap(1);
+
+}
