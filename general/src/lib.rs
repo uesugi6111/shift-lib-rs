@@ -1,6 +1,6 @@
 pub use self::general::*;
 
-mod general {
+pub mod general {
     #[macro_export]
     macro_rules! max_assign {
         ($left:expr,$right:expr) => {
