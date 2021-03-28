@@ -1,5 +1,4 @@
 pub use self::iter_ext::*;
-use num_traits;
 mod iter_ext {
     struct Scanl<I: Iterator, St, F: FnMut(&St, I::Item) -> St> {
         iter: I,
@@ -92,7 +91,7 @@ mod iter_ext {
             (self.0).into_iter()
         }
     }
-    trait IteratorExt: Iterator {
+    pub trait IteratorExt: Iterator {
         fn scanl<St, B, F: FnMut(&St, Self::Item) -> St>(
             self,
             initial_state: St,
