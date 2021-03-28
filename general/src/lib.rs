@@ -1,22 +1,7 @@
 pub use self::general::*;
 
-pub mod general {
-    #[macro_export]
-    macro_rules! max_assign {
-        ($left:expr,$right:expr) => {
-            if $left < $right {
-                $left = $right;
-            }
-        };
-    }
-    #[macro_export]
-    macro_rules! min_assign {
-        ($left:expr,$right:expr) => {
-            if $left > $right {
-                $left = $right;
-            }
-        };
-    }
+mod general {
+
     pub fn ceil_pow2(n: u32) -> u32 {
         32 - n.saturating_sub(1).leading_zeros()
     }
@@ -25,10 +10,28 @@ pub mod general {
     }
 }
 
+#[macro_export]
+macro_rules! max_assign {
+    ($left:expr,$right:expr) => {
+        if $left < $right {
+            $left = $right;
+        }
+    };
+}
+#[macro_export]
+macro_rules! min_assign {
+    ($left:expr,$right:expr) => {
+        if $left > $right {
+            $left = $right;
+        }
+    };
+}
 #[test]
 fn test() {
     for i in 1..=10 {
         println!("{} {:?}", ceil_pow2(i), i.next_power_of_two())
     }
-    max_assign!(1,2);
+    let mut x = 1;
+    max_assign!(x, 2);
+    dbg!(x);
 }
