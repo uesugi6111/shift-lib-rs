@@ -744,7 +744,9 @@ dependencies = [
 name = "shift-lib-rs-math"
 version = "0.1.0"
 dependencies = [
+ "ac-library-rs-parted-modint",
  "rustc-hash",
+ "shift-lib-rs-iter-ext",
 ]
 
 [[package]]

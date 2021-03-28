@@ -1,6 +1,6 @@
 pub use self::iter_ext::*;
 mod iter_ext {
-    struct Scanl<I: Iterator, St, F: FnMut(&St, I::Item) -> St> {
+    pub struct Scanl<I: Iterator, St, F: FnMut(&St, I::Item) -> St> {
         iter: I,
         state: Option<St>,
         f: F,
@@ -92,7 +92,7 @@ mod iter_ext {
         }
     }
     pub trait IteratorExt: Iterator {
-        fn scanl<St, B, F: FnMut(&St, Self::Item) -> St>(
+        fn scanl<St, F: FnMut(&St, Self::Item) -> St>(
             self,
             initial_state: St,
             f: F,

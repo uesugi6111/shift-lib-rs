@@ -12,3 +12,5 @@ name = "shift_math"
 
 [dependencies]
 rustc-hash = "=1.1.0"
+ac-library-rs-parted-modint      = { git = "https://github.com/qryxip/ac-library-rs-parted" }
+__shift_iter_ext = { package = "shift-lib-rs-iter-ext", version = "0.1.0", path = "/home/shift/rust_lib/iter_ext" }
