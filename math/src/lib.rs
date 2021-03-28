@@ -21,7 +21,7 @@ mod math {
     }
     pub fn divisors(n: usize) -> Vec<usize> {
         let mut ret = Vec::new();
-        for i in (2..).take_while(|&i| i * i <= n).filter(|&i| n % i == 0) {
+        for i in (1..).take_while(|&i| i * i <= n).filter(|&i| n % i == 0) {
             ret.push(i);
             if i * i < n {
                 ret.push(n / i);
