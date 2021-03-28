@@ -105,8 +105,8 @@ mod iter_ext {
         fn accumulate(self) -> Accumulate<Self>
         where
             Self: Sized + Iterator,
-            Self::Item: std::ops::Add<Self, Output = Self>
-                + std::ops::Sub<Self, Output = Self>
+            Self::Item: std::ops::Add<Self::Item, Output = Self::Item>
+                + std::ops::Sub<Self::Item, Output = Self::Item>
                 + num_traits::Zero,
         {
             Accumulate::new(self)
@@ -114,4 +114,10 @@ mod iter_ext {
     }
 
     impl<T: Iterator> IteratorExt for T {}
+}
+
+#[test]
+fn t() {
+    let v = (0..5).accumulate().collect::<Vec<_>>();
+    assert_eq!(v,vec![0,0,1,3,6,10])
 }
