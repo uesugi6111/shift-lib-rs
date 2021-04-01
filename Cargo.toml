@@ -136,3 +136,8 @@ num-integer = "=0.1.42"
 num-iter = "=0.1.40"
 num-rational = "=0.2.4"
 num-traits = "=0.2.11"
+
+
+
+[workspace]
+members  = ["data_structure","bitset","general","graph","iter_ext","math","traits"]
