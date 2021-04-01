@@ -11,3 +11,8 @@ fn main() {
     let dst = DisjointSparseTable::<usize,Additive>::new(vec![6,3,5]);
     println!("{}",dst.query(0..2));
 }
+
+#[test]
+fn t() {
+    //panic!();
+}
