@@ -1,6 +1,8 @@
 pub use self::math::*;
+pub mod fp;
 mod math {
     use rustc_hash::FxHashMap;
+    use num_traits;
     pub fn prime_factorization(n: usize) -> FxHashMap<usize, usize> {
         let mut mp = FxHashMap::default();
         let mut tmp = n;
@@ -96,8 +98,8 @@ mod math {
             assert!(r <= n);
             self.fact_[n]*self.inv_fact_[r]*self.inv_fact_[n-r]
         }
-        
     }
+
 }
 
 #[test]
