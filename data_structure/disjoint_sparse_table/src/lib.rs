@@ -67,5 +67,16 @@ mod disjoint_sparse_table {
 
 #[test]
 fn p() {
+    //panic!();
+}
+
+#[test]
+fn test() {
+    use alga::general::Additive;
+    let dst = DisjointSparseTable::<i32, Additive>::new(vec![5, 2, 1, 4, 9]);
+    assert_eq!(dst.query(0..3),8);
+    assert_eq!(dst.query(2..5),14);
+    assert_eq!(dst.query(3..5),13);
+    assert_eq!(dst.query(0..5),21);
     panic!();
 }
