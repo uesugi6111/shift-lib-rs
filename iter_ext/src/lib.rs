@@ -116,8 +116,3 @@ mod iter_ext {
     impl<T: Iterator> IteratorExt for T {}
 }
 
-#[test]
-fn t() {
-    let v = (0..5).accumulate().collect::<Vec<_>>();
-    assert_eq!(v,vec![0,0,1,3,6,10])
-}

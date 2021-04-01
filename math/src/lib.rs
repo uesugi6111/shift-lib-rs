@@ -102,8 +102,3 @@ mod math {
 
 }
 
-#[test]
-fn test() {
-    assert_eq!(divisors(16), vec![1, 2, 4, 8, 16]);
-    assert_eq!(divisors(15), vec![1, 3, 5, 15]);
-}
