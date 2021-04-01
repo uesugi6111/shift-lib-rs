@@ -1,10 +1,10 @@
 pub use self::disjoint_sparse_table::*;
 mod disjoint_sparse_table {
     use __shift_traits::Wrap;
-    use alga::general::{AbstractMagma, AbstractSemigroup,Operator};
+    use alga::general::{AbstractMagma, AbstractSemigroup, Operator};
     use std::marker::PhantomData;
     extern crate __shift_general as general;
-    
+
     pub struct DisjointSparseTable<T, O>
     where
         O: Operator,
@@ -17,13 +17,12 @@ mod disjoint_sparse_table {
     where
         O: Operator,
         Wrap<T>: AbstractSemigroup<O>,
-        T:Clone
+        T: Clone,
     {
         pub fn new(a: Vec<T>) -> Self {
-
-            let m = a.len(); 
+            let m = a.len();
             let n = general::msb(a.len() as u32) as usize;
-            let mut table:Vec<Vec<Wrap<T>>> = Vec::new();
+            let mut table: Vec<Vec<Wrap<T>>> = Vec::new();
             table.push(a.iter().cloned().map(Wrap).collect());
             for i in 1..=n {
                 let mut v = Vec::with_capacity(m);
@@ -68,5 +67,11 @@ mod disjoint_sparse_table {
 
 #[test]
 fn t() {
-
+    use alga::general::Additive;
+    let dst = DisjointSparseTable::<i32, Additive>::new(vec![5, 2, 1, 4, 9]);
+    assert_eq!(dst.query(0..3),8);
+    assert_eq!(dst.query(2..5),14);
+    assert_eq!(dst.query(3..5),13);
+    assert_eq!(dst.query(0..5),21);
+    panic!();
 }
