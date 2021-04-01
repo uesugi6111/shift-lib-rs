@@ -78,5 +78,4 @@ fn test() {
     assert_eq!(dst.query(2..5),14);
     assert_eq!(dst.query(3..5),13);
     assert_eq!(dst.query(0..5),21);
-    panic!();
 }
