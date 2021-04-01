@@ -65,3 +65,7 @@ mod disjoint_sparse_table {
     }
 }
 
+#[test]
+fn p() {
+    panic!();
+}
