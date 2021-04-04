@@ -14,5 +14,7 @@ fn main() {
 
 #[test]
 fn t() {
-    //panic!();
+    let mut a = 10;
+    max_assign!(a,20);
+    assert_eq!(a,20);
 }

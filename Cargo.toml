@@ -139,5 +139,5 @@ num-traits = "=0.2.11"
 
 
 
-[workspace]
-members  = ["data_structure","bitset","general","graph","iter_ext","math","traits"]
+#[workspace]
+#members  = ["data_structure","bitset","general","graph","iter_ext","math","traits"]
