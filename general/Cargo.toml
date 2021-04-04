@@ -9,3 +9,6 @@ publish = false
 
 [lib]
 name = "shift_general"
+
+[dependencies]
+num-traits = "=0.2.11"

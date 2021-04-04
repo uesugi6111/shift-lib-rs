@@ -724,6 +724,9 @@ dependencies = [
 [[package]]
 name = "shift-lib-rs-general"
 version = "0.1.0"
+dependencies = [
+ "num-traits",
+]
 
 [[package]]
 name = "shift-lib-rs-graph"
