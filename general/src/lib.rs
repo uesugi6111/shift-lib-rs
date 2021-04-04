@@ -23,29 +23,11 @@ mod general {
     pub fn msb(n: u32) -> u32 {
         31 - n.leading_zeros()
     }
-    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
+    #[derive(PartialEq, Eq, PartialOrd, Ord,Clone, Copy)]
     pub enum OrdOption<T: Ord> {
         Min,
         Val(T),
         Max,
-    }
-    impl<T: Ord + Copy> OrdOption<T> {
-        fn unwrap(&self) -> T {
-            if let Self::Val(x) = self {
-                *x
-            } else {
-                panic!()
-            }
-        }
-    }
-    impl<T: Ord + num::Bounded + Copy> OrdOption<T> {
-        fn round(&self) -> T {
-            match self {
-                Self::Val(x) => *x,
-                Self::Max => T::max_value(),
-                _ => T::min_value(),
-            }
-        }
     }
     impl<T: Ord + num_traits::CheckedAdd + num_traits::Zero> std::ops::Add for OrdOption<T> {
         type Output = Self;
