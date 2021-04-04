@@ -23,7 +23,7 @@ mod general {
     pub fn msb(n: u32) -> u32 {
         31 - n.leading_zeros()
     }
-    #[derive(PartialEq, Eq, PartialOrd, Ord)]
+    #[derive(PartialEq, Eq, PartialOrd, Ord,Clone, Copy)]
     pub enum OrdOption<T: Ord> {
         Min,
         Val(T),
