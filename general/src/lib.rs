@@ -51,19 +51,36 @@ mod general {
             }
         }
     }
-    impl<T: Ord + std::ops::Mul<Output = T> + num_traits::Zero> std::ops::Mul for OrdOption<T> {
+    impl<T: Ord + num_traits::CheckedMul + num_traits::Zero> std::ops::Mul for OrdOption<T> {
         type Output = Self;
 
         fn mul(self, rhs: Self) -> Self::Output {
-            todo!()
-            /*
-            match (self, rhs) {
-                (Self::Max,Self::Max) => Self::Max,
-                (Self::Max,x) | (x,Self::Max) => {if x < Self::Val(T::zero()) {Self::Min} else {Self::Max}},
-                (Self::)
-                _ => todo!()
+            if self == Self::Val(T::zero()) || rhs == Self::Val(T::zero()) {
+                Self::Val(T::zero())
+            } else {
+                match (self, rhs) {
+                    (Self::Max, Self::Max) => Self::Max,
+                    (Self::Max, x) | (x, Self::Max) => {
+                        if x < Self::Val(T::zero()) {
+                            Self::Min
+                        } else {
+                            Self::Max
+                        }
+                    }
+                    (Self::Val(x), Self::Val(y)) => match x.checked_mul(&y) {
+                        Some(ans) => Self::Val(ans),
+                        _ => {
+                            if (x > T::zero() && y > T::zero()) || (x < T::zero() && y < T::zero())
+                            {
+                                Self::Max
+                            } else {
+                                Self::Min
+                            }
+                        }
+                    },
+                    _ => todo!(),
+                }
             }
-            */
         }
     }
     impl<T: Ord + std::fmt::Display> std::fmt::Display for OrdOption<T> {
