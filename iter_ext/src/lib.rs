@@ -54,7 +54,7 @@ mod iter_ext {
 
     impl<I, St, F> Iterator for Scanl<I, St, F>
     where
-        I: Iterator<Item = St>,
+        I: Iterator,
         St: Clone,
         F: FnMut(&St, I::Item) -> St,
     {
