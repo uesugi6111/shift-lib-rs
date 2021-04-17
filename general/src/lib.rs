@@ -23,7 +23,7 @@ mod general {
     pub fn msb(n: u32) -> u32 {
         31 - n.leading_zeros()
     }
-    #[derive(PartialEq, Eq, PartialOrd, Ord,Clone, Copy)]
+    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
     pub enum OrdOption<T: Ord> {
         Min,
         Val(T),
@@ -91,6 +91,28 @@ mod general {
             }
         }
     }
+    pub fn print_oneline<I: IntoIterator>(a: I)
+    where
+        I::Item: std::fmt::Display,
+    {
+        let mut a = a.into_iter();
+        if let Some(v) = a.next() {
+            print!("{}", v);
+            for v in a {
+                print!(" {}", v)
+            }
+            println!();
+        }
+    }
+    pub fn print_lines<I: IntoIterator>(a: I)
+    where
+        I::Item: std::fmt::Display,
+    {
+        let a = a.into_iter();
+        for v in a {
+            println!("{}", v);
+        }
+    }
 }
 
 #[test]
@@ -100,4 +122,24 @@ fn t() {
     assert!(v < OO::Max);
     assert!(OO::Min < v);
     assert!(v + OO::Max == OO::Max);
+}
+
+#[test]
+fn test_output() {
+    let v = [5, 2, 1, 4, 9];
+    let vv = vec![5, 2, 1, 4, 9];
+    let null = {
+        let mut v = vec![1];
+        v.pop();
+        v
+    };
+    print_lines(&null);
+    print_oneline(&null);
+    print_lines(&vv);
+    print_oneline(&vv);
+}
+
+#[test]
+fn panic() {
+    panic!();
 }
