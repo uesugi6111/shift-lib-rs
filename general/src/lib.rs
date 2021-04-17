@@ -139,7 +139,3 @@ fn test_output() {
     print_oneline(&vv);
 }
 
-#[test]
-fn panic() {
-    panic!();
-}
