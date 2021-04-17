@@ -5,14 +5,14 @@ mod graph {
         cmp::Reverse,
         collections::{BinaryHeap, HashMap, VecDeque},
         hash::{BuildHasherDefault, Hash},
-        ops::Sub,
+        ops::{Add, Sub},
     };
 
     use num_traits::{One, Zero};
     use rustc_hash::{FxHashMap, FxHasher};
 
-    pub struct GeneralGraph<'a, I, T, Itr: IntoIterator<Item = (I, T)>> {
-        next: &'a mut dyn FnMut(I, T) -> Itr,
+    pub struct GeneralGraph<'a, I, T, C, Itr: IntoIterator<Item = (I, T, C)>> {
+        pub next: &'a mut dyn Fn(I, C) -> Itr,
     }
 
     #[derive(Copy, Clone)]
@@ -37,26 +37,39 @@ mod graph {
         }
     }
 
-    impl<T: Zero + Ord + Copy, I: Hash + Copy + Eq, Itr: IntoIterator<Item = (I, T)>>
-        GeneralGraph<'_, I, T, Itr>
+    impl<
+            'a,
+            T: Zero + Ord + Copy,
+            I: Hash + Copy + Eq,
+            Itr: IntoIterator<Item = (I, T, C)>,
+            C: Hash + Eq + Copy,
+        > GeneralGraph<'a, I, T, C, Itr>
     {
-        pub fn dijkstra(self, start: I) -> HashMap<I, T, BuildHasherDefault<FxHasher>> {
+        pub fn dijkstra(
+            &self,
+            start: I,
+            init: C,
+        ) -> HashMap<(I, C), T, BuildHasherDefault<FxHasher>> {
             let mut queue = BinaryHeap::new();
-            queue.push(Reverse(FirstOrd(T::zero(), start)));
+            queue.push(Reverse(FirstOrd(T::zero(), (start, init))));
             let mut dist = FxHashMap::default();
-            dist.insert(start, T::zero());
+            dist.insert((start, init), T::zero());
             while !queue.is_empty() {
-                let Reverse(FirstOrd(cost, idx)) = queue.pop().unwrap();
-                if dist.get(&idx).and_then(|&x| Some(x < cost)) == Some(true) {
+                let Reverse(FirstOrd(cost, (idx, context))) = queue.pop().unwrap();
+                if dist.get(&(idx, context)).and_then(|&x| Some(x < cost)) == Some(true) {
                     continue;
                 }
-                for (idx2, next_cost) in (self.next)(idx, cost) {
-                    assert!(next_cost >= cost);
-                    if dist.get(&idx2).and_then(|&x| Some(x <= next_cost)) == Some(true) {
+                for (idx2, c, next_context) in (self.next)(idx, context) {
+                    let next_cost = cost + c;
+                    if dist
+                        .get(&(idx2, next_context))
+                        .and_then(|&x| Some(x <= next_cost))
+                        == Some(true)
+                    {
                         continue;
                     }
-                    dist.insert(idx2, next_cost);
-                    queue.push(Reverse(FirstOrd(next_cost, idx2)));
+                    dist.insert((idx2, next_context), next_cost);
+                    queue.push(Reverse(FirstOrd(next_cost, (idx2, next_context))));
                 }
             }
             dist
@@ -64,45 +77,60 @@ mod graph {
     }
 
     impl<
-            T: Copy + Zero + Ord + One + Sub<Output = T>,
+            T: Copy + Zero + Ord + Add<Output = T> + One,
             I: Hash + Eq + Copy,
-            Itr: IntoIterator<Item = (I, T)>,
-        > GeneralGraph<'_, I, T, Itr>
+            C: Hash + Eq + Copy,
+            Itr: IntoIterator<Item = (I, T, C)>,
+        > GeneralGraph<'_, I, T, C, Itr>
     {
-        pub fn bfs_01(self, start: I) -> HashMap<I, T, BuildHasherDefault<FxHasher>> {
+        pub fn bfs_01(&self, start: I, init: C) -> HashMap<(I, C), T, BuildHasherDefault<FxHasher>> {
             let mut queue = VecDeque::new();
-            queue.push_back((T::zero(), start));
+            queue.push_back(Reverse(FirstOrd(T::zero(), (start, init))));
             let mut dist = FxHashMap::default();
-            dist.insert(start, T::zero());
+            dist.insert((start, init), T::zero());
             while !queue.is_empty() {
-                let (cost, idx) = queue.pop_front().unwrap();
-                if dist.get(&idx).and_then(|&x| Some(x < cost)) == Some(true) {
+                let Reverse(FirstOrd(cost, (idx, context))) = queue.pop_front().unwrap();
+                if dist.get(&(idx, context)).and_then(|&x| Some(x < cost)) == Some(true) {
                     continue;
                 }
-                for (idx2, next_cost) in (self.next)(idx, cost) {
-                    assert!(next_cost - cost == T::zero() || next_cost - cost == T::one());
-                    if dist.get(&idx2).and_then(|&x| Some(x <= next_cost)) == Some(true) {
+                for (idx2, c, next_context) in (self.next)(idx, context) {
+                    let next_cost = cost + c;
+                    if dist
+                        .get(&(idx2, next_context))
+                        .and_then(|&x| Some(x <= next_cost))
+                        == Some(true)
+                    {
                         continue;
                     }
-                    dist.insert(idx2, next_cost);
-                    if next_cost == cost {
-                        queue.push_front((next_cost, idx2));
+                    dist.insert((idx2, next_context), next_cost);
+                    if c == T::zero() {
+                        queue.push_front(Reverse(FirstOrd(next_cost, (idx2, next_context))));
+                    } else if c == T::one() {
+                        queue.push_back(Reverse(FirstOrd(next_cost, (idx2, next_context))));
                     } else {
-                        queue.push_back((next_cost, idx2));
+                        panic!("Cost is only 0 or 1")
                     }
                 }
             }
             dist
         }
+    }
+    impl<
+            T: Copy + Zero + Ord,
+            I: Hash + Eq + Copy,
+            C: Hash + Eq + Copy,
+            Itr: IntoIterator<Item = (I, T, C)>,
+        > GeneralGraph<'_, I, T, C, Itr>
+    {
         pub fn floyd_warshall(
-            self,
-            vertices: Vec<I>,
-        ) -> HashMap<(I, I), T, BuildHasherDefault<FxHasher>> {
+            &self,
+            vertices: Vec<(I, C)>,
+        ) -> HashMap<((I, C), (I, C)), T, BuildHasherDefault<FxHasher>> {
             let mut dist = FxHashMap::default();
-            for &i in &vertices {
-                for (j, cost) in (self.next)(i.into(), T::zero()) {
+            for &(i, c) in &vertices {
+                for (j, cost, ctx) in (self.next)(i, c) {
                     //dist[i][j.into()] = Some(cost);
-                    dist.insert((i, j), cost);
+                    dist.insert(((i, c), (j, ctx)), cost);
                 }
             }
             for &k in &vertices {
@@ -121,9 +149,8 @@ mod graph {
             dist
         }
     }
-
-    impl<'a, T, I, Itr: IntoIterator<Item = (I, T)>> GeneralGraph<'a, I, T, Itr> {
-        pub fn new(next: &'a mut dyn FnMut(I, T) -> Itr) -> Self {
+    impl<'a, T, I, C, Itr: IntoIterator<Item = (I, T, C)>> GeneralGraph<'a, I, T, C, Itr> {
+        pub fn new(next: &'a mut dyn Fn(I, C) -> Itr) -> Self {
             GeneralGraph { next }
         }
     }
@@ -144,17 +171,27 @@ mod graph {
     }
 
     macro_rules! from_edges {
-        ($edges:expr,$cost_type:ty) => {
+        ($edges:expr) => {{
             GeneralGraph {
-                next: &mut (|idx: usize, cost: $cost_type| -> Vec<_> {
-                    $edges[idx].iter().map(|&(i, c)| (i, c + cost)).collect()
-                }),
+                next : &mut |idx: usize, _: ()| -> Vec<_> {
+                ($edges)[idx].iter().map(|&(i, c)| (i, c, ())).collect()
             }
-        };
+            }
+        }};
     }
 }
-
 #[test]
 fn test() {
-    let mut v = vec![1, 2, 3, 4, 5];
+    let edges = {
+        let mut e = vec![Vec::new(); 3];
+        e[0].push((1, 1));
+        e[1].push((2, 1));
+        e[2].push((0, 1));
+        e
+    };
+    let g = from_edges!(edges);
+    let res = g.dijkstra(1, ()).iter().map(|(&(a,_),&b)| (a,b)).collect::<Vec<_>>();
+    let res2 = g.bfs_01(1, ()).iter().map(|(&(a,_),&b)| (a,b)).collect::<Vec<_>>();
+    assert_eq!(res,vec![(0,2),(1,0),(2,1)]);
+    assert_eq!(res,res2);
 }

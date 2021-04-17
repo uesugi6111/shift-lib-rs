@@ -53,7 +53,6 @@ mod general {
     }
     impl<T: Ord + num_traits::CheckedMul + num_traits::Zero> std::ops::Mul for OrdOption<T> {
         type Output = Self;
-
         fn mul(self, rhs: Self) -> Self::Output {
             if self == Self::Val(T::zero()) || rhs == Self::Val(T::zero()) {
                 Self::Val(T::zero())
@@ -128,11 +127,7 @@ fn t() {
 fn test_output() {
     let v = [5, 2, 1, 4, 9];
     let vv = vec![5, 2, 1, 4, 9];
-    let null = {
-        let mut v = vec![1];
-        v.pop();
-        v
-    };
+    let null:Vec<i32> = Vec::new();
     print_lines(&null);
     print_oneline(&null);
     print_lines(&vv);
