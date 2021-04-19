@@ -1,7 +1,9 @@
+use std::ops::Range;
+
 pub use self::bitset::*;
 
 mod bitset {
-
+    use std::ops::Range;
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct Bitset(pub usize);
     pub struct BitsetRangeIter {
@@ -78,11 +80,11 @@ mod bitset {
 
         fn next(&mut self) -> Option<Self::Item> {
             let cur = self.cur?;
-            let ret = (cur as i32 - (self.end & (!self.start)) as i32) & (self.end & (!self.start)) as i32;
+            let ret = (cur as i32 - (self.end & (!self.start)) as i32)
+                & (self.end & (!self.start)) as i32;
             if ret == 0 {
                 self.cur = None;
-            }
-            else {
+            } else {
                 self.cur = Some(ret as usize);
             }
             Some(Bitset(cur | self.start))
@@ -141,7 +143,7 @@ mod bitset {
         pub fn singleton(n: usize) -> Self {
             Self(1 << n)
         }
-        pub fn new(n:usize) -> Self {
+        pub fn new(n: usize) -> Self {
             Self(n)
         }
     }
@@ -170,15 +172,25 @@ mod bitset {
             ret
         }
     }
-}
 
+}
 #[test]
 fn test() {
     let all = Bitset::gen(3);
-    assert_eq!(all.0,0b111);
-    let subsets = all.subsets().map(|x|x.0).collect::<Vec<_>>();
-    assert_eq!(subsets,vec![0b000,0b001,0b010,0b011,0b100,0b101,0b110,0b111]);
+    assert_eq!(all.0, 0b111);
+    let subsets = all.subsets().map(|x| x.0).collect::<Vec<_>>();
+    assert_eq!(
+        subsets,
+        vec![0b000, 0b001, 0b010, 0b011, 0b100, 0b101, 0b110, 0b111]
+    );
     let min_set = Bitset::new(0b010);
-    let range = BitsetRange::from(min_set..=all).iter().map(|x|x.0).collect::<Vec<_>>();
-    assert_eq!(range,vec![0b010,0b011,0b110,0b111])
+    let range = BitsetRange::from(min_set..=all)
+        .iter()
+        .map(|x| x.0)
+        .collect::<Vec<_>>();
+    assert_eq!(range, vec![0b010, 0b011, 0b110, 0b111]);
+    let r : BitsetRange = (min_set..=all).into();
+    for i in r {
+        println!("{:?}", i);
+    }
 }

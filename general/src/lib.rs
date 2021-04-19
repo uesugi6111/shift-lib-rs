@@ -90,19 +90,7 @@ mod general {
             }
         }
     }
-    pub fn print_oneline<I: IntoIterator>(a: I)
-    where
-        I::Item: std::fmt::Display,
-    {
-        let mut a = a.into_iter();
-        if let Some(v) = a.next() {
-            print!("{}", v);
-            for v in a {
-                print!(" {}", v)
-            }
-            println!();
-        }
-    }
+
     pub fn print_lines<I: IntoIterator>(a: I)
     where
         I::Item: std::fmt::Display,
@@ -111,6 +99,18 @@ mod general {
         for v in a {
             println!("{}", v);
         }
+    }
+    pub fn print_oneline<I: IntoIterator>(a: I)
+    where
+        I::Item: std::fmt::Display,
+    {
+        println!(
+            "{}",
+            a.into_iter()
+                .map(|x| x.to_string())
+                .collect::<Vec<_>>()
+                .join(" ")
+        );
     }
 }
 
@@ -127,10 +127,10 @@ fn t() {
 fn test_output() {
     let v = [5, 2, 1, 4, 9];
     let vv = vec![5, 2, 1, 4, 9];
-    let null:Vec<i32> = Vec::new();
+    let null: Vec<i32> = Vec::new();
     print_lines(&null);
     print_oneline(&null);
     print_lines(&vv);
     print_oneline(&vv);
+    println!("a");
 }
-
