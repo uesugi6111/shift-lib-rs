@@ -195,8 +195,11 @@ mod traits {
             }
         };
     }
-    pub struct Min<T: Ord + Bounded>(T);
-    pub struct Max<T: Ord + Bounded>(T);
+
+    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
+    pub struct Min<T: Ord + Bounded + Copy>(T);
+    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
+    pub struct Max<T: Ord + Bounded + Copy>(T);
     impl_monoid!(Min<T:Ord + Bounded + Copy>,a b => *a.min(b),T::max_value());
     impl_monoid!(Max<T:Ord + Bounded + Copy>,a b => *a.min(b),T::min_value());
 }
