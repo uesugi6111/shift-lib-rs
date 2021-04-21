@@ -55,8 +55,6 @@ mod disjoint_sparse_table {
 #[test]
 fn test() {
     use __shift_traits::SemiGroup;
-    #[derive(Clone)]
-    struct S(i32);
     impl_semigroup!(S,i32,a b => a+b);
     let dst = DisjointSparseTable::<S>::new(vec![5, 2, 1, 4, 9]);
     assert_eq!(dst.query(0..3),8);

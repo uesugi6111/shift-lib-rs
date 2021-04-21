@@ -24,7 +24,9 @@ mod traits {
     }
     #[macro_export]
     macro_rules! impl_semigroup {
-        ($wr:ty,$t:ty,$op:expr) => {
+        ($wr:ident,$t:ty,$op:expr) => {
+            #[derive(Clone)]
+            struct $wr($t);
             impl SemiGroup for $wr {
                 type S = $t;
                 fn operator(a: &Self::S, b: &Self::S) -> Self::S {
@@ -32,7 +34,9 @@ mod traits {
                 }
             }
         };
-        ($wr:ty,$t:ty,$a:tt $b:tt => $res:expr) => {
+        ($wr:ident,$t:ty,$a:tt $b:tt => $res:expr) => {
+            #[derive(Clone)]
+            struct $wr($t);
             impl SemiGroup for $wr {
                 type S = $t;
                 fn operator($a: &Self::S, $b: &Self::S) -> Self::S {
@@ -59,7 +63,9 @@ mod traits {
     }
     #[macro_export]
     macro_rules! impl_semigroup_by_symbol {
-        ($wr:ty,$t:ty,$op_symbol:tt) => {
+        ($wr:ident,$t:ty,$op_symbol:tt) => {
+            #[derive(Clone)]
+            struct $wr($t);
             impl SemiGroup for $wr {
                 type S = $t;
                 fn operator(a:&Self::S,b:&Self::S) -> Self::S {
@@ -78,7 +84,7 @@ mod traits {
     }
     #[macro_export]
     macro_rules! impl_monoid {
-        ($wr:ty,$t:ty,$op:expr,$id:expr) => {
+        ($wr:ident,$t:ty,$op:expr,$id:expr) => {
             impl_semigroup!($wr,$t, $op);
             impl Monoid for $wr {
                 type S = $t;
@@ -96,7 +102,7 @@ mod traits {
                 }
             }
         };
-        ($wr:ty,$t:ty,$a:tt $b:tt => $ans:expr,$id:expr) => {
+        ($wr:ident,$t:ty,$a:tt $b:tt => $ans:expr,$id:expr) => {
             impl_semigroup!($wr,$t,$a $b => $ans);
             impl Monoid for $wr {
                 type S = $t;
@@ -117,7 +123,7 @@ mod traits {
     }
     #[macro_export]
     macro_rules! impl_group {
-        ($wr:ty,$t:ty,$op:expr,$id:expr,$inv:expr) => {
+        ($wr:ident,$t:ty,$op:expr,$id:expr,$inv:expr) => {
             impl_monoid!($wr,$t, $op, $id);
             impl Group for $wr {
                 type S = $t;
@@ -126,7 +132,7 @@ mod traits {
                 }
             }
         };
-        ($wr:ty,$t:ty,$a:tt $b:tt => $ans:expr,$id:expr,$c:tt => $d:expr) => {
+        ($wr:ident,$t:ty,$a:tt $b:tt => $ans:expr,$id:expr,$c:tt => $d:expr) => {
             impl_monoid!($wr,$t,$a $b => $ans,$id);
             impl Group for $wr {
                 type S = $t;
@@ -172,6 +178,6 @@ fn tuple_group() {
 
 #[test]
 fn impl_by_symbol() {
-    impl_semigroup_by_symbol!(i64,+);
-    assert_eq!(i64::operator(&9, &5), 14);
+    impl_semigroup_by_symbol!(S,i64,+);
+    assert_eq!(S::operator(&9, &5), 14);
 }
