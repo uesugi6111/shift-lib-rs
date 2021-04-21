@@ -149,6 +149,4 @@ fn t(){
     assert_eq!(rs.count(),11);
     assert_eq!(rs.mex(11),11);
 
-    rs.remove(..);
-    assert_eq!(rs.count(),0);
 }
