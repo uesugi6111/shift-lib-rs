@@ -1,6 +1,7 @@
 pub use self::traits::*;
 
 mod traits {
+    use num_traits::Bounded;
     pub trait SemiGroup {
         type S: Clone;
         fn operator(a: &Self::S, b: &Self::S) -> Self::S;
@@ -44,6 +45,16 @@ mod traits {
                 }
             }
         };
+        ($g:ident<$bounded_type:ident: $bound:tt $(+ $others:tt )*>,$a:tt $b:tt => $res:expr) => {
+            impl<$bounded_type> SemiGroup for $g<$bounded_type>
+            where $bounded_type : $bound $(+ $others)*
+            {
+                type S = T;
+                fn operator($a: &Self::S, $b: &Self::S) -> Self::S {
+                    $res
+                }
+            }
+        };
         ($t:ty,$op:expr) => {
             impl SemiGroup for $t {
                 type S = $t;
@@ -60,6 +71,7 @@ mod traits {
                 }
             }
         };
+
     }
     #[macro_export]
     macro_rules! impl_semigroup_by_symbol {
@@ -111,6 +123,17 @@ mod traits {
                 }
             }
         };
+        ($g:ident<$bounded_type:ident: $bound:tt $(+ $others:tt )*>,$a:tt $b:tt => $res:expr,$id:expr) => {
+            impl_semigroup!($g<$bounded_type: $bound $(+ $others)*>,$a $b => $res);
+            impl<$bounded_type> Monoid for $g<$bounded_type>
+            where $bounded_type : $bound $(+ $others)*
+            {
+                type S = $bounded_type;
+                fn identity() -> <Self as Monoid>::S {
+                    $id
+                }
+            }
+        };
         ($t:ty,$a:tt $b:tt => $ans:expr,$id:expr) => {
             impl_semigroup!($t,$a $b => $ans);
             impl Monoid for $t {
@@ -119,7 +142,8 @@ mod traits {
                     $id
                 }
             }
-        }
+        };
+
     }
     #[macro_export]
     macro_rules! impl_group {
@@ -158,8 +182,30 @@ mod traits {
                     $d
                 }
             }
-        }
+        };
+        ($g:ident<$bounded_type:ident: $bound:tt $(+ $others:tt )*>,$a:tt $b:tt => $res:expr,$id:expr,$c:tt => $d:expr) => {
+            impl_monoid!($g:ident<$bounded_type:ident: $bound:tt $(+ $others:tt )*>,$a:tt $b:tt => $res:expr,$id);
+            impl<$bounded_type> Group for $g<$bounded_type>
+            where $bounded_type : $bound $(+ $others)*
+            {
+                type S = $bounded_type;
+                fn inverse($c: &<Self as Group>::S) -> <Self as Group>::S {
+                    $d
+                }
+            }
+        };
     }
+    #[macro_export]
+    macro_rules! array {
+        ($($x:ident)+ *) => {
+            ($($x)+*)
+        };
+    }
+
+    struct Min<T: Ord + Bounded>(T);
+    struct Max<T: Ord + Bounded>(T);
+    impl_monoid!(Min<T:Ord + Bounded + Copy>,a b => *a.min(b),T::max_value());
+    impl_monoid!(Max<T:Ord + Bounded + Copy>,a b => *a.min(b),T::min_value());
 }
 
 #[test]
