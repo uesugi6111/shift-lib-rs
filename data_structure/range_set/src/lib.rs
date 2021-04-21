@@ -100,7 +100,7 @@ mod range_set {
         }
         pub fn remove<R:RangeBounds<i64>>(&mut self, range: R) {
             let  l = match range.start_bound() {
-                Bound::Unbounded => 0,
+                Bound::Unbounded => i64::MIN,
                 Bound::Excluded(&s) => s+1,
                 Bound::Included(&s) => s,
             };
@@ -126,7 +126,7 @@ mod range_set {
         pub fn count(&self) -> usize {
             self.cnt
         }
-        pub fn inner_map(&self) -> &BTreeSet<(i64,i64)> {
+        pub fn inner_set(&self) -> &BTreeSet<(i64,i64)> {
             &self.s
         }
     }
@@ -148,4 +148,7 @@ fn t(){
     // -1..7,8..11
     assert_eq!(rs.count(),11);
     assert_eq!(rs.mex(11),11);
+
+    rs.remove(..);
+    assert_eq!(rs.count(),0);
 }
