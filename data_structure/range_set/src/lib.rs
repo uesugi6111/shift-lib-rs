@@ -25,12 +25,12 @@ mod range_set {
         }
         pub fn insert<R:RangeBounds<i64>>(&mut self, range: R) {
             let mut l = match range.start_bound() {
-                Bound::Unbounded => i64::MIN,
+                Bound::Unbounded => std::i64::MIN,
                 Bound::Excluded(&s) => s+1,
                 Bound::Included(&s) => s,
             };
             let mut r = match range.end_bound() {
-                Bound::Unbounded => i64::MAX,
+                Bound::Unbounded => std::i64::MAX,
                 Bound::Excluded(&t) => t,
                 Bound::Included(&t) => t+1
             };
@@ -100,12 +100,12 @@ mod range_set {
         }
         pub fn remove<R:RangeBounds<i64>>(&mut self, range: R) {
             let  l = match range.start_bound() {
-                Bound::Unbounded => i64::MIN,
+                Bound::Unbounded => std::i64::MIN,
                 Bound::Excluded(&s) => s+1,
                 Bound::Included(&s) => s,
             };
             let  r = match range.end_bound() {
-                Bound::Unbounded => i64::MAX,
+                Bound::Unbounded => std::i64::MAX,
                 Bound::Excluded(&t) => t,
                 Bound::Included(&t) => t+1
             };
