@@ -195,15 +195,8 @@ mod traits {
             }
         };
     }
-    #[macro_export]
-    macro_rules! array {
-        ($($x:ident)+ *) => {
-            ($($x)+*)
-        };
-    }
-
-    struct Min<T: Ord + Bounded>(T);
-    struct Max<T: Ord + Bounded>(T);
+    pub struct Min<T: Ord + Bounded>(T);
+    pub struct Max<T: Ord + Bounded>(T);
     impl_monoid!(Min<T:Ord + Bounded + Copy>,a b => *a.min(b),T::max_value());
     impl_monoid!(Max<T:Ord + Bounded + Copy>,a b => *a.min(b),T::min_value());
 }
