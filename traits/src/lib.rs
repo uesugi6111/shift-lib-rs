@@ -1,27 +1,35 @@
 pub use self::traits::*;
 
 mod traits {
-    use num_traits::Bounded;
+
+    use num_traits::{Bounded, One, Zero};
     pub trait SemiGroup {
         type S: Clone;
         fn operator(a: &Self::S, b: &Self::S) -> Self::S;
     }
     pub trait ComSemiGroup: SemiGroup {
-        type S: Clone;
     }
     pub trait Monoid: SemiGroup {
-        type S: Clone;
-        fn identity() -> <Self as Monoid>::S;
+        fn identity() -> Self::S;
+        fn pow(a:&Self::S,mut n:usize) -> Self::S {
+            let mut ret = Self::identity();
+            let mut mul = a.clone();
+            while n > 0 {
+                if n % 2 == 1 {
+                    ret = Self::operator(&ret, &mul).into();
+                }
+                mul = Self::operator(&mul, &mul);
+                n /= 2;
+            }
+            ret
+        }
     }
     pub trait ComMonoid: Monoid {
-        type S: Clone;
     }
     pub trait Group: Monoid {
-        type S: Clone;
-        fn inverse(a: &<Self as Group>::S) -> <Self as Group>::S;
+        fn inverse(a: &Self::S) -> Self::S;
     }
     pub trait ComGroup: Group {
-        type S: Clone;
     }
     #[macro_export]
     macro_rules! impl_semigroup {
@@ -128,8 +136,7 @@ mod traits {
             impl<$bounded_type> Monoid for $g<$bounded_type>
             where $bounded_type : $bound $(+ $others)*
             {
-                type S = $bounded_type;
-                fn identity() -> <Self as Monoid>::S {
+                fn identity() -> <Self>::S {
                     $id
                 }
             }
@@ -196,30 +203,30 @@ mod traits {
         };
     }
 
-    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
-    pub struct Min<T: Ord + Bounded + Copy>(T);
-    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
-    pub struct Max<T: Ord + Bounded + Copy>(T);
-    impl_monoid!(Min<T:Ord + Bounded + Copy>,a b => *a.min(b),T::max_value());
-    impl_monoid!(Max<T:Ord + Bounded + Copy>,a b => *a.min(b),T::min_value());
+    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
+    pub struct Min<T: Ord + Bounded + Clone>(T);
+    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
+    pub struct Max<T:  Bounded + Clone>(T);
+    impl_monoid!(Min<T:Ord + Bounded + Clone>,a b => a.clone().max(b.clone()),T::max_value());
+    impl_monoid!(Max<T:Ord + Bounded + Clone>,a b => a.clone().min(b.clone()),T::min_value());
+    #[derive(Clone)]
+    pub struct Additive<T: Clone + Zero>(T);
+    #[derive(Clone)]
+    pub struct Multiplicative<T: Clone + One>(T);
+    impl_monoid!(Additive<T: Clone + Zero>,a b => a.clone().add(b.clone()),T::zero());
+    impl_monoid!(Multiplicative<T: Clone + One>,a b => a.clone().mul(b.clone()),T::one());
+
 }
 
-#[test]
-fn t() {
-    impl_group!(i32,a b => a+b,0,a => -a);
-    assert_eq!(i32::operator(&1, &2), 3);
-    assert_eq!(i32::identity(), 0);
-    assert_eq!(i32::inverse(&1), -1);
-}
 
-#[test]
-fn tuple_group() {
-    impl_semigroup!((i64,i64),(a,b) (c,d) => (a+c,b+d));
-    assert_eq!(<(i64, i64)>::operator(&(1, 2), &(3, 4)), (4, 6));
-}
 
 #[test]
 fn impl_by_symbol() {
     impl_semigroup_by_symbol!(S,i64,+);
     assert_eq!(S::operator(&9, &5), 14);
+}
+#[test]
+fn add_mul() {
+    type T = Additive<i64>;
+    assert_eq!(T::operator(&1, &-200),-199);
 }

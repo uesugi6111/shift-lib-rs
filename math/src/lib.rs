@@ -2,7 +2,6 @@ pub use self::math::*;
 pub mod fp;
 mod math {
     use rustc_hash::FxHashMap;
-    use num_traits;
     pub fn prime_factorization(n: usize) -> FxHashMap<usize, usize> {
         let mut mp = FxHashMap::default();
         let mut tmp = n;
@@ -65,7 +64,6 @@ mod math {
     pub fn pf_osa_k(table: &Vec<usize>, mut n: usize) -> FxHashMap<usize, usize> {
         let mut ret = FxHashMap::default();
         while n > 1 {
-            //ret.push(table[n]);
             *ret.entry(table[n]).or_insert(0) += 1;
             n /= table[n];
         }

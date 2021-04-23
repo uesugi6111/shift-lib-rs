@@ -114,10 +114,23 @@ mod iter_ext {
     }
 
     impl<T: Iterator> IteratorExt for T {}
+    #[macro_export]
+    macro_rules! scanl1 {
+        ($a:tt $b:tt => $res:expr,$init:expr,$i:expr) => {
+            $i.iter().scanl($init, |$a, $b| $res).collect::<Vec<_>>()
+        };
+    }
 }
 
 #[test]
 fn test() {
     let v = (0..5).accumulate().collect::<Vec<_>>();
-    assert_eq!(v,vec![0,0,1,3,6,10])
-} 
+    assert_eq!(v, vec![0, 0, 1, 3, 6, 10]);
+    let v = [5, 2, 1, 4, 9];
+    let v = scanl1!(a b => {
+        let mut c = a.clone(); 
+        c.push_str(&b.to_string()); 
+        c.clone()
+    },"".to_string(),v);
+    println!("{:?}", v);
+}

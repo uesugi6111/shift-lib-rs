@@ -189,8 +189,5 @@ fn test() {
         .map(|x| x.0)
         .collect::<Vec<_>>();
     assert_eq!(range, vec![0b010, 0b011, 0b110, 0b111]);
-    let r : BitsetRange = (min_set..=all).into();
-    for i in r {
-        println!("{:?}", i);
-    }
+
 }
