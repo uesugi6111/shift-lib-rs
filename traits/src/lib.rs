@@ -106,7 +106,7 @@ mod traits {
         ($wr:ident,$t:ty,$op:expr,$id:expr) => {
             impl_semigroup!($wr,$t, $op);
             impl Monoid for $wr {
-                fn identity() -> <Self as traits::Monoid>::S {
+                fn identity() -> Self::S {
                     $id
                 }
             }
@@ -114,7 +114,7 @@ mod traits {
         ($t:ty,$op:expr,$id:expr) => {
             impl_semigroup!($t, $op);
             impl Monoid for $t {
-                fn identity() -> <Self as traits::Monoid>::S {
+                fn identity() -> Self::S {
                     $id
                 }
             }
@@ -122,7 +122,7 @@ mod traits {
         ($wr:ident,$t:ty,$a:tt $b:tt => $ans:expr,$id:expr) => {
             impl_semigroup!($wr,$t,$a $b => $ans);
             impl Monoid for $wr {
-                fn identity() -> <Self as traits::Monoid>::S {
+                fn identity() -> Self::S {
                     $id
                 }
             }
@@ -132,7 +132,7 @@ mod traits {
             impl<$bounded_type> Monoid for $g<$bounded_type>
             where $bounded_type : $bound $(+ $others)*
             {
-                fn identity() -> <Self>::S {
+                fn identity() -> Self::S {
                     $id
                 }
             }
@@ -140,7 +140,7 @@ mod traits {
         ($t:ty,$a:tt $b:tt => $ans:expr,$id:expr) => {
             impl_semigroup!($t,$a $b => $ans);
             impl Monoid for $t {
-                fn identity() -> <Self as traits::Monoid>::S {
+                fn identity() -> Self::S {
                     $id
                 }
             }
@@ -152,7 +152,7 @@ mod traits {
         ($wr:ident,$t:ty,$op:expr,$id:expr,$inv:expr) => {
             impl_monoid!($wr,$t, $op, $id);
             impl Group for $wr {
-                fn inverse(a: &<Self as Group>::S) -> <Self as Group>::S {
+                fn inverse(a: &Self::S) -> Self::S {
                     $inv(a)
                 }
             }
@@ -160,7 +160,7 @@ mod traits {
         ($wr:ident,$t:ty,$a:tt $b:tt => $ans:expr,$id:expr,$c:tt => $d:expr) => {
             impl_monoid!($wr,$t,$a $b => $ans,$id);
             impl Group for $wr {
-                fn inverse($c: &<Self as Group>::S) -> <Self as Group>::S {
+                fn inverse($c: &Self::S) -> Self::S {
                     $d
                 }
             }
@@ -168,7 +168,7 @@ mod traits {
         ($t:ty,$op:expr,$id:expr,$inv:expr) => {
             impl_monoid!($t, $op, $id);
             impl Group for $t {
-                fn inverse(a: &<Self as Group>::S) -> <Self as Group>::S {
+                fn inverse(a: &Self::S) -> Self::S {
                     $inv(a)
                 }
             }
@@ -176,7 +176,7 @@ mod traits {
         ($t:ty,$a:tt $b:tt => $ans:expr,$id:expr,$c:tt => $d:expr) => {
             impl_monoid!($t,$a $b => $ans,$id);
             impl Group for $t {
-                fn inverse($c: &<Self as Group>::S) -> <Self as Group>::S {
+                fn inverse($c: &Self::S) -> Self::S {
                     $d
                 }
             }
@@ -186,7 +186,7 @@ mod traits {
             impl<$bounded_type> Group for $g<$bounded_type>
             where $bounded_type : $bound $(+ $others)*
             {
-                fn inverse($c: &<Self as Group>::S) -> <Self as Group>::S {
+                fn inverse($c: &Self::S) -> Self::S {
                     $d
                 }
             }
