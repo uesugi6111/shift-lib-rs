@@ -2,7 +2,7 @@ pub use self::traits::*;
 
 mod traits {
 
-    use num_traits::{Bounded, One, Zero};
+    use num_traits::{Bounded, One, PrimInt, Zero};
     pub trait SemiGroup {
         type S: Clone;
         fn operator(a: &Self::S, b: &Self::S) -> Self::S;
@@ -11,15 +11,15 @@ mod traits {
     }
     pub trait Monoid: SemiGroup {
         fn identity() -> Self::S;
-        fn pow(a:&Self::S,mut n:usize) -> Self::S {
+        fn pow<T:PrimInt>(a:&Self::S,mut n:T) -> Self::S {
             let mut ret = Self::identity();
             let mut mul = a.clone();
-            while n > 0 {
-                if n % 2 == 1 {
+            while n > T::zero() {
+                if n.rem(T::one() + T::one()) != T::zero() {
                     ret = Self::operator(&ret, &mul).into();
                 }
                 mul = Self::operator(&mul, &mul);
-                n /= 2;
+                n = n / (T::one() + T::one());
             }
             ret
         }

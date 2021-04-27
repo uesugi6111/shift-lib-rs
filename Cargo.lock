@@ -751,6 +751,7 @@ dependencies = [
  "num-traits",
  "rustc-hash",
  "shift-lib-rs-iter-ext",
+ "shift-lib-rs-traits",
 ]
 
 [[package]]
