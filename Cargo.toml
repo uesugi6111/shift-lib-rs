@@ -1,11 +1,10 @@
 [package]
 name = "rust_lib"
 version = "0.1.0"
-authors = ["shift <koicom0702@gmail.com>"]
+authors = ["shift"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 # AtCoder 2020年言語アップデート以降に使用できるクレート。
 # 次のページに各クレートについての細かい紹介があります。

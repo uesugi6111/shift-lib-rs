@@ -1,7 +1,8 @@
 mod fp {
-    pub struct Fp<M> {
-        val:u32,
-        _phantom : std::marker::PhantomData<M>
+    #[derive(Clone, Copy,PartialEq, Eq,Debug)]
+    pub struct Fp<const MOD:usize> {
+        val:u64,
+        m:u64
     }
     
 }
