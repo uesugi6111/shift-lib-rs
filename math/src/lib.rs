@@ -1,4 +1,5 @@
 pub use self::math::*;
+pub mod fft;
 pub mod fp;
 mod math {
     use rustc_hash::FxHashMap;
@@ -69,34 +70,8 @@ mod math {
         }
         ret
     }
-    use acl_modint::{StaticModInt,Modulus};
-    use __shift_iter_ext::IteratorExt;
-    pub struct FpUtils<M> {
-        fact_ : Vec<StaticModInt<M>>,
-        inv_fact_ : Vec<StaticModInt<M>>
-    }
-    impl<M:Modulus> FpUtils<M> {
-        pub fn new(n:usize) -> Self {
-            let fact_ = 
-            (1..=n).map(StaticModInt::new).scanl(StaticModInt::new(1), |x,y|x*y).collect::<Vec<_>>();
-            let mut inv_fact_ = vec![StaticModInt::new(0);n+1];
-            inv_fact_[n]=StaticModInt::new(1)/fact_[n];
-            for i in (0..n).rev() {
-                inv_fact_[i] = inv_fact_[i+1]*StaticModInt::new(i+1);
-            }
-            Self {fact_,inv_fact_}
-        }
-        pub fn fact(&self,n:usize) -> StaticModInt<M> {
-            self.fact_[n]
-        }
-        pub fn inv_fact(&self,n:usize) -> StaticModInt<M> {
-            self.inv_fact_[n]
-        }
-        pub fn binom(&self,n:usize,r:usize) -> StaticModInt<M> {
-            assert!(r <= n);
-            self.fact_[n]*self.inv_fact_[r]*self.inv_fact_[n-r]
-        }
-    }
+
+    
 
 }
 

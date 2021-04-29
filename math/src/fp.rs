@@ -1,10 +1,7 @@
+use __shift_iter_ext::IteratorExt;
 use __shift_traits::{Monoid, Multiplicative};
 use num_traits::{One, PrimInt, Zero};
-use std::{
-    marker::PhantomData,
-    ops::{Add, AddAssign, Div, Mul, MulAssign},
-};
-
+use std::{marker::PhantomData, ops::{Add, AddAssign, Div, Mul, MulAssign, Neg, Sub, SubAssign}};
 pub trait Modulus: 'static + Copy + Eq {
     const MOD: u64;
 }
@@ -37,6 +34,12 @@ impl<M: Modulus> Add for Fp<M> {
     }
 }
 
+impl<M:Modulus> Sub for Fp<M> {
+    type Output = Self;
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self::new((self.val + M::MOD - rhs.val) % M::MOD)
+    }
+}
 impl<M: Modulus> AddAssign for Fp<M> {
     fn add_assign(&mut self, rhs: Self) {
         self.val += rhs.val;
@@ -61,6 +64,13 @@ impl<M: Modulus> Mul for Fp<M> {
 impl<M: Modulus> One for Fp<M> {
     fn one() -> Self {
         Self::new(1)
+    }
+}
+impl<M:Modulus> Neg for Fp<M> {
+    type Output = Self;
+
+    fn neg(self) -> Self::Output {
+        Self::new(M::MOD - self.val)
     }
 }
 
@@ -105,5 +115,33 @@ pub type F998244353 = Fp<Mod998244353>;
 fn t() {
     type F = F1000000007;
     let v = F::new(2);
-    assert_eq!(v.inv().val, 500000004)
+    assert_eq!(v.inv().val, 500000004);
+    let ut = FpUtils::<Mod1000000007>::new(100);
+    println!("{}",ut.binom(100, 50).val)
 }
+pub struct FpUtils<M:Modulus> {
+        fact_ : Vec<Fp<M>>,
+        inv_fact_ : Vec<Fp<M>>
+    }
+    impl<M:Modulus> FpUtils<M> {
+        pub fn new(n:usize) -> Self {
+            let fact_ = 
+            (1..=n).map(Fp::new).scanl(Fp::new(1), |x,y|*x*y).collect::<Vec<_>>();
+            let mut inv_fact_ = vec![Fp::new(0);n+1];
+            inv_fact_[n]=Fp::new(1)/fact_[n];
+            for i in (0..n).rev() {
+                inv_fact_[i] = inv_fact_[i+1]*Fp::new(i+1);
+            }
+            Self {fact_,inv_fact_}
+        }
+        pub fn fact(&self,n:usize) -> Fp<M> {
+            self.fact_[n]
+        }
+        pub fn inv_fact(&self,n:usize) -> Fp<M> {
+            self.inv_fact_[n]
+        }
+        pub fn binom(&self,n:usize,r:usize) -> Fp<M> {
+            assert!(r <= n);
+            self.fact_[n]*self.inv_fact_[r]*self.inv_fact_[n-r]
+        }
+    }
