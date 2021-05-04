@@ -1,5 +1,4 @@
 pub use self::math::*;
-pub mod fft;
 pub mod fp;
 mod math {
     use rustc_hash::FxHashMap;
