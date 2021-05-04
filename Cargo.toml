@@ -124,7 +124,6 @@ __shift_math = { package = "shift-lib-rs-math", version = "0.1.0", path = "./mat
 __shift_graph = { package = "shift-lib-rs-graph", version = "0.1.0", path = "./graph" }
 __shift_data_structure = { package = "shift-lib-rs-data-structure", version = "0.1.0", path = "./data_structure" }
 __shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "./traits" }
-__shift_doubling = { package = "shift-lib-rs-doubling", version = "0.1.0", path = "./doubling" }
 
 [dev-dependencies]
 rand = "0.7.3"
