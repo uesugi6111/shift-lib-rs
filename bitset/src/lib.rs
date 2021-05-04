@@ -106,13 +106,12 @@ mod bitset {
     }
 
     impl Bitset {
-        pub fn elem(&self, i: usize) -> bool {
+        pub fn contains(&self, i: usize) -> bool {
             (self.0 >> i) & 1 == 1
         }
-        pub fn insert(&mut self, i: usize) {
-            self.0 |= 1 << i;
+        pub fn add(&self, i: usize) -> Self {
+            Self(self.0 | 1 << i)
         }
-
         pub fn empty() -> Self {
             Bitset(0)
         }
@@ -146,16 +145,19 @@ mod bitset {
         pub fn new(n: usize) -> Self {
             Self(n)
         }
+        pub fn count(&self) -> usize {
+            self.0.count_ones() as usize
+        }
     }
 
     impl PartialOrd for Bitset {
         fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-            let x = self.0 & other.0;
-            if self.0 == other.0 {
+            let x = self.intersection(other);
+            if self == other {
                 Some(std::cmp::Ordering::Equal)
-            } else if x == self.0 {
+            } else if x == *self {
                 Some(std::cmp::Ordering::Less)
-            } else if x == other.0 {
+            } else if x == *other {
                 Some(std::cmp::Ordering::Greater)
             } else {
                 None
@@ -165,11 +167,11 @@ mod bitset {
 
     impl std::iter::FromIterator<usize> for Bitset {
         fn from_iter<T: IntoIterator<Item = usize>>(iter: T) -> Self {
-            let mut ret = Bitset::empty();
+            let mut ret = 0;
             for i in iter {
-                ret.insert(i);
+                ret |= 1<<i;
             }
-            ret
+            Self::new(ret)
         }
     }
 
