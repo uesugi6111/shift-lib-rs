@@ -77,7 +77,6 @@ mod bitset {
 
     impl Iterator for BitsetRangeIter {
         type Item = Bitset;
-
         fn next(&mut self) -> Option<Self::Item> {
             let cur = self.cur?;
             let ret = (cur as i32 - (self.end & (!self.start)) as i32)
@@ -148,6 +147,9 @@ mod bitset {
         pub fn count(&self) -> usize {
             self.0.count_ones() as usize
         }
+        pub fn complement(&self, n: usize) -> Self {
+            Self::gen(n).diff(self)
+        }
     }
 
     impl PartialOrd for Bitset {
@@ -169,12 +171,11 @@ mod bitset {
         fn from_iter<T: IntoIterator<Item = usize>>(iter: T) -> Self {
             let mut ret = 0;
             for i in iter {
-                ret |= 1<<i;
+                ret |= 1 << i;
             }
             Self::new(ret)
         }
     }
-
 }
 #[test]
 fn test() {
@@ -191,5 +192,4 @@ fn test() {
         .map(|x| x.0)
         .collect::<Vec<_>>();
     assert_eq!(range, vec![0b010, 0b011, 0b110, 0b111]);
-
 }
