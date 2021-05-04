@@ -45,9 +45,9 @@ mod doubling {
         pub fn new(a:&Vec<usize>)->Self {
             Self::F(Mapping(a.clone()))
         }
-        pub fn composition(&self,rhs:Self)->Self {
+        pub fn composition(&self,rhs:&Self)->Self {
             match (self,rhs) {
-                (Self::Identity,r) => r,
+                (Self::Identity,r) => r.clone(),
                 (s,Self::Identity) => s.clone(),
                 (Self::F(f),Self::F(g)) => {
                     assert_eq!(f.0.len(),g.0.len());
@@ -58,13 +58,13 @@ mod doubling {
             }
         }
     }
-    impl_monoid!(MappingI,f g => f.composition(g.clone()),MappingI::Identity);
+    impl_monoid!(MappingI,f g => f.composition(g),MappingI::Identity);
 }
 #[test]
 fn t() {
     use __shift_traits::Monoid;
     let f = MappingI::from_func(|x| (2*x)%5,5);
-    let ff = f.composition(f.clone());
+    let ff = f.composition(&f);
     let a = MappingI::pow(&f, 2);
     assert_eq!(ff,MappingI::F(Mapping::new(&vec![0,4,3,2,1])));
     assert_eq!(ff,a);
