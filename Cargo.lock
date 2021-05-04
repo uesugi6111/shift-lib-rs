@@ -682,6 +682,7 @@ dependencies = [
  "rustc-hash",
  "shift-lib-rs-bitset",
  "shift-lib-rs-data-structure",
+ "shift-lib-rs-doubling",
  "shift-lib-rs-general",
  "shift-lib-rs-graph",
  "shift-lib-rs-iter-ext",
@@ -718,6 +719,13 @@ dependencies = [
  "alga",
  "num-traits",
  "shift-lib-rs-general",
+ "shift-lib-rs-traits",
+]
+
+[[package]]
+name = "shift-lib-rs-doubling"
+version = "0.1.0"
+dependencies = [
  "shift-lib-rs-traits",
 ]
 

@@ -101,8 +101,11 @@ mod traits {
             }
         }
     }
+    /// Wrapper,Type,Operator,Identity or
+    /// Type,Operator,Identity
     #[macro_export]
     macro_rules! impl_monoid {
+        
         ($wr:ident,$t:ty,$op:expr,$id:expr) => {
             impl_semigroup!($wr,$t, $op);
             impl Monoid for $wr {
