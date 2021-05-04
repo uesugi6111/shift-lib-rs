@@ -1,7 +1,7 @@
 use crate::fp::{Fp,F998244353 as F};
 
 type Poly = Vec<F>;
-fn rem(f : &Poly,c:u64) -> Poly {
+fn rem(f : &Poly,c:F) -> Poly {
     todo!()
 }
 fn fft(f : &Poly,i:u64,flag : bool) -> Poly
@@ -13,5 +13,10 @@ fn fft(f : &Poly,i:u64,flag : bool) -> Poly
     }
     let l = rem(f,i/2);
     let r = rem(f,i/2 ); 
+<<<<<<< HEAD
     todo!()
 }
+=======
+
+}
+>>>>>>> parent of 80d0762... t
