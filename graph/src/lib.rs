@@ -1,4 +1,5 @@
 pub use self::graph::*;
+pub mod grid;
 #[macro_use]
 mod graph {
     use std::{
