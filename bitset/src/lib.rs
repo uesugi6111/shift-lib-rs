@@ -144,7 +144,7 @@ mod bitset {
         pub fn new(n: usize) -> Self {
             Self(n)
         }
-        pub fn count(&self) -> usize {
+        pub fn count_elems(&self) -> usize {
             self.0.count_ones() as usize
         }
         pub fn complement(&self, n: usize) -> Self {

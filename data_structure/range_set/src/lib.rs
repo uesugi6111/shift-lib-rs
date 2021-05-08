@@ -15,7 +15,7 @@ mod range_set {
             }
         }
 
-        // x 以上であって self に含まれない最小の元を返す
+        /// x 以上であって self に含まれない最小の元を返す
         pub fn mex(&self, x: i64) -> i64 {
             if let Some(&(_, u)) = self.prev((x + 1, x + 1)) {
                 u
