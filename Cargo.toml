@@ -122,7 +122,9 @@ __shift_general = { package = "shift-lib-rs-general", version = "0.1.0", path = 
 __shift_iter_ext = { package = "shift-lib-rs-iter-ext", version = "0.1.0", path = "./iter_ext" }
 __shift_math = { package = "shift-lib-rs-math", version = "0.1.0", path = "./math" }
 __shift_graph = { package = "shift-lib-rs-graph", version = "0.1.0", path = "./graph" }
-__shift_data_structure = { package = "shift-lib-rs-data-structure", version = "0.1.0", path = "./data_structure" }
+__shift_disjoint_sparse_table = { package = "shift-lib-rs-disjoint-sparse-table", version = "0.1.0", path = "./disjoint_sparse_table" }
+__shift_range_set = { package = "shift-lib-rs-range-set", version = "0.1.0", path = "./range_set" }
+
 __shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "./traits" }
 
 [dev-dependencies]
@@ -138,4 +140,4 @@ num-traits = "=0.2.11"
 
 
 [workspace]
-members  = ["data_structure","bitset","general","graph","iter_ext","math","traits"]
+members  = ["disjoint_sparse_table","bitset","general","graph","iter_ext","math","traits","range_set"]

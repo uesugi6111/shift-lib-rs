@@ -12,6 +12,6 @@ name = "shift_disjoint_sparse_table"
 
 [dependencies]
 alga = "=0.9.3"
-__shift_general = { package = "shift-lib-rs-general", version = "0.1.0", path = "../../general" }
-__shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "../../traits" }
+__shift_general = { package = "shift-lib-rs-general", version = "0.1.0", path = "../general" }
+__shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "../traits" }
 num-traits = "=0.2.11"
