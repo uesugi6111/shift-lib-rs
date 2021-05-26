@@ -1,5 +1,5 @@
 use __shift_iter_ext::IteratorExt;
-use __shift_traits::{Monoid, Multiplicative};
+use __shift_traits::{Monoid};
 use num_traits::{One, PrimInt, Zero};
 use std::{marker::PhantomData, ops::{Add, AddAssign, Div, Mul, MulAssign, Neg, Sub, SubAssign}};
 pub trait Modulus: 'static + Copy + Eq {
@@ -86,7 +86,8 @@ impl<M: Modulus> Zero for Fp<M> {
 impl<M: Modulus> Fp<M> {
     fn inv(&self) -> Self {
         assert!(!self.is_zero());
-        Multiplicative::<Fp<M>>::pow(self, M::MOD - 2)
+        //Multiplicative::<Fp<M>>::pow(self, M::MOD - 2)
+        todo!()
     }
 }
 
