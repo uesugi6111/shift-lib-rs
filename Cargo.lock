@@ -764,7 +764,6 @@ dependencies = [
 name = "shift-lib-rs-traits"
 version = "0.1.0"
 dependencies = [
- "alga",
  "num-traits",
  "shift-lib-rs-general",
 ]
