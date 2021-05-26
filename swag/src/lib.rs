@@ -71,16 +71,3 @@ mod swag {
     }
 }
 
-#[test]
-fn t() {
-    use __shift_traits::SemiGroup;
-    impl_semigroup!(S,usize,a b => *a.min(&b));
-    let n = 7;
-    let l = 3;
-    let a = vec![1, 7, 7, 4, 8, 1, 6];
-    let mut swag = swag::SWAG::<S>::new(&a);
-    let ans = (0..n - l + 1)
-        .map(|i| swag.query(i, i + l))
-        .collect::<Vec<_>>();
-    assert_eq!(ans, vec![1, 4, 4, 1, 1])
-}

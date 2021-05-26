@@ -205,5 +205,5 @@ fn impl_by_symbol() {
     assert_eq!(S::operator(&9, &5), 14);
     impl_monoid!(M,usize,a b => a+b,0);
     let val = M(10);
-    assert_eq!(M::pow(&10,5),50);
+    assert_eq!(M::pow(&10,5_u32),50);
 }
