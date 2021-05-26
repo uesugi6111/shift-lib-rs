@@ -6,3 +6,4 @@ pub extern crate __shift_graph as graph;
 pub extern crate __shift_disjoint_sparse_table as disjoint_sparse_table;
 pub extern crate __shift_range_set as range_set;
 pub extern crate __shift_swag as swag;
+pub extern crate __shift_algebraic_structures_impl as algebraic_structures_impl;

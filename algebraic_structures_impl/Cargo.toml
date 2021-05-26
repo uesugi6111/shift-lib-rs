@@ -1,0 +1,15 @@
+[package]
+name = "shift-lib-rs-algebraic-structures-impl"
+version = "0.1.0"
+edition = "2018"
+license = "CC0-1.0"
+repository = ""
+keywords = ["competitive"]
+publish = false
+
+[lib]
+name = "shift_algebraic_structures_impl"
+
+[dependencies]
+__shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "../traits" }
+num-traits = "=0.2.11"

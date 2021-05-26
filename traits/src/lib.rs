@@ -1,8 +1,6 @@
 pub use self::traits::*;
 
 mod traits {
-
-    use num_traits::{Bounded, One, PrimInt, Zero};
     pub trait SemiGroup {
         type S: Clone;
         fn operator(a: &Self::S, b: &Self::S) -> Self::S;
@@ -11,15 +9,17 @@ mod traits {
     }
     pub trait Monoid: SemiGroup {
         fn identity() -> Self::S;
-        fn pow<T:PrimInt>(a:&Self::S,mut n:T) -> Self::S {
+        fn pow<T:From<u128> + Ord + std::ops::Rem<Output = T> + Eq + std::ops::Div<Output = T> + Copy>(a:&Self::S,mut n:T) -> Self::S {
             let mut ret = Self::identity();
             let mut mul = a.clone();
-            while n > T::zero() {
-                if n.rem(T::one() + T::one()) != T::zero() {
+            let zero : T = 0.into();
+            let two : T = 2.into();
+            while n > zero {
+                if n.rem(two) != zero {
                     ret = Self::operator(&ret, &mul).into();
                 }
                 mul = Self::operator(&mul, &mul);
-                n = n / (T::one() + T::one());
+                n = n / two;
             }
             ret
         }
@@ -196,19 +196,6 @@ mod traits {
         };
     }
 
-    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
-    pub struct Min<T: Ord + Bounded + Clone>(T);
-    #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
-    pub struct Max<T:  Bounded + Clone>(T);
-    impl_monoid!(Min<T:Ord + Bounded + Clone>,a b => a.clone().max(b.clone()),T::max_value());
-    impl_monoid!(Max<T:Ord + Bounded + Clone>,a b => a.clone().min(b.clone()),T::min_value());
-    #[derive(Clone)]
-    pub struct Additive<T: Clone + Zero>(T);
-    #[derive(Clone)]
-    pub struct Multiplicative<T: Clone + One>(T);
-    impl_monoid!(Additive<T: Clone + Zero>,a b => a.clone().add(b.clone()),T::zero());
-    impl_monoid!(Multiplicative<T: Clone + One>,a b => a.clone().mul(b.clone()),T::one());
-
 }
 
 
@@ -217,9 +204,7 @@ mod traits {
 fn impl_by_symbol() {
     impl_semigroup_by_symbol!(S,i64,+);
     assert_eq!(S::operator(&9, &5), 14);
-}
-#[test]
-fn add_mul() {
-    type T = Additive<i64>;
-    assert_eq!(T::operator(&1, &-200),-199);
+    impl_monoid!(M,usize,a b => a+b,0);
+    let val = M(10);
+    assert_eq!(M::pow(&10,5),50);
 }

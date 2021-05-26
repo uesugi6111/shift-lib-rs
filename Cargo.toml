@@ -126,6 +126,7 @@ __shift_disjoint_sparse_table = { package = "shift-lib-rs-disjoint-sparse-table"
 __shift_range_set = { package = "shift-lib-rs-range-set", version = "0.1.0", path = "./range_set" }
 __shift_swag = { package = "shift-lib-rs-swag", version = "0.1.0", path = "./swag" }
 __shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "./traits" }
+__shift_algebraic_structures_impl = { package = "shift-lib-rs-algebraic-structures-impl", version = "0.1.0", path = "./algebraic_structures_impl" }
 
 [dev-dependencies]
 rand = "0.7.3"
