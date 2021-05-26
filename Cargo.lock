@@ -773,7 +773,6 @@ dependencies = [
 name = "shift-lib-rs-traits"
 version = "0.1.0"
 dependencies = [
- "num-traits",
  "shift-lib-rs-general",
 ]
 

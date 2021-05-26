@@ -12,4 +12,3 @@ name = "shift_traits"
 
 [dependencies]
 __shift_general = { package = "shift-lib-rs-general", version = "0.1.0", path = "../general" }
-num-traits = "=0.2.11"
