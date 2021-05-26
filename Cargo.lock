@@ -770,9 +770,6 @@ dependencies = [
 [[package]]
 name = "shift-lib-rs-traits"
 version = "0.1.0"
-dependencies = [
- "shift-lib-rs-general",
-]
 
 [[package]]
 name = "sized-chunks"

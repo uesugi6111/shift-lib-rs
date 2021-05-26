@@ -11,4 +11,3 @@ publish = false
 name = "shift_traits"
 
 [dependencies]
-__shift_general = { package = "shift-lib-rs-general", version = "0.1.0", path = "../general" }
