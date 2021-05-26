@@ -1,5 +1,3 @@
-#[macro_use]
-extern crate __shift_traits as traits;
 pub use self::swag::*;
 mod swag {
     use __shift_traits::SemiGroup;
