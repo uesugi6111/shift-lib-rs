@@ -8,12 +8,12 @@ keywords = ["competitive"]
 publish = false
 
 [lib]
-name = "shift_math"
+name = "math"
 
 [dependencies]
 rustc-hash = "=1.1.0"
 ac-library-rs-parted-modint      = { git = "https://github.com/qryxip/ac-library-rs-parted" }
-__shift_iter_ext = { package = "shift-lib-rs-iter-ext", version = "0.1.0", path = "../iter_ext" }
+__iter_ext = { package = "shift-lib-rs-iter-ext", version = "0.1.0", path = "../iter_ext" }
 num-traits = "=0.2.11"
-__shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "../traits" }
-__shift_algebraic_structures_impl = { package = "shift-lib-rs-algebraic-structures-impl", version = "0.1.0", path = "../algebraic_structures_impl" }
+__traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "../traits" }
+__algebraic_structures_impl = { package = "shift-lib-rs-algebraic-structures-impl", version = "0.1.0", path = "../algebraic_structures_impl" }

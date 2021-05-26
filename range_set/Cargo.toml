@@ -8,6 +8,6 @@ keywords = ["competitive"]
 publish = false
 
 [lib]
-name = "shift_range_set"
+name = "range_set"
 
 [dependencies]

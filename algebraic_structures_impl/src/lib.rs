@@ -1,7 +1,7 @@
 pub use self::algebraic_structures_impl::*;
 mod algebraic_structures_impl {
     use num_traits::{Zero,Bounded,One};
-    use __shift_traits::*;
+    use __traits::*;
     #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
     pub struct Min<T: Ord + Bounded + Clone>(T);
     #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
@@ -18,7 +18,7 @@ mod algebraic_structures_impl {
 
 #[test]
 fn add_mul() {
-    use __shift_traits::SemiGroup;
+    use __traits::SemiGroup;
     type T = Additive<i64>;
     assert_eq!(T::operator(&1, &-200),-199);
 }

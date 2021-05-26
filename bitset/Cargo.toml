@@ -8,4 +8,4 @@ keywords = ["competitive"]
 publish = false
 
 [lib]
-name = "shift_bitset"
+name = "bitset"

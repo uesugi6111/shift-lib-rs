@@ -1,6 +1,6 @@
 pub use self::swag::*;
 mod swag {
-    use __shift_traits::SemiGroup;
+    use __traits::SemiGroup;
 
     pub struct SWAG<'a, T: SemiGroup> {
         data: std::slice::Iter<'a, T::S>,

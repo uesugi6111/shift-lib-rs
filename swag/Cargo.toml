@@ -8,7 +8,7 @@ keywords = ["competitive"]
 publish = false
 
 [lib]
-name = "shift_swag"
+name = "swag"
 
 [dependencies]
-__shift_traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "../traits" }
+__traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "../traits" }

@@ -8,7 +8,7 @@ keywords = ["competitive"]
 publish = false
 
 [lib]
-name = "shift_graph"
+name = "graph"
 
 [dependencies]
 rustc-hash = "=1.1.0"

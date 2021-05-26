@@ -8,7 +8,7 @@ keywords = ["competitive"]
 publish = false
 
 [lib]
-name = "shift_iter_ext"
+name = "iter_ext"
 
 [dependencies]
 num-traits = "=0.2.11"

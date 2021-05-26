@@ -8,6 +8,6 @@ keywords = ["competitive"]
 publish = false
 
 [lib]
-name = "shift_general"
+name = "general"
 
 [dependencies]

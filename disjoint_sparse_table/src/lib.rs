@@ -1,11 +1,11 @@
 pub use self::disjoint_sparse_table::*;
 #[macro_use]
-extern crate __shift_traits as traits;
+extern crate __traits as traits;
 mod disjoint_sparse_table {
-    use __shift_traits::SemiGroup;
+    use __traits::SemiGroup;
 
 
-    extern crate __shift_general as general;
+    extern crate __general as general;
 
     pub struct DisjointSparseTable<T>
     where
@@ -54,7 +54,7 @@ mod disjoint_sparse_table {
 
 #[test]
 fn test() {
-    use __shift_traits::SemiGroup;
+    use __traits::SemiGroup;
     impl_semigroup!(S,i32,a b => a+b);
     let dst = DisjointSparseTable::<S>::new(vec![5, 2, 1, 4, 9]);
     assert_eq!(dst.query(0..3),8);

@@ -1,6 +1,6 @@
-use __shift_iter_ext::IteratorExt;
-use __shift_traits::{Monoid};
-use __shift_algebraic_structures_impl::Multiplicative;
+use __iter_ext::IteratorExt;
+use __traits::{Monoid};
+use __algebraic_structures_impl::Multiplicative;
 use num_traits::{One, PrimInt, Zero};
 use std::{marker::PhantomData, ops::{Add, AddAssign, Div, Mul, MulAssign, Neg, Sub, SubAssign}};
 pub trait Modulus: 'static + Copy + Eq {
