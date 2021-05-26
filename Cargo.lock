@@ -754,6 +754,7 @@ dependencies = [
  "ac-library-rs-parted-modint",
  "num-traits",
  "rustc-hash",
+ "shift-lib-rs-algebraic-structures-impl",
  "shift-lib-rs-iter-ext",
  "shift-lib-rs-traits",
 ]

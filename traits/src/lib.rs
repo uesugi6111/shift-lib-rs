@@ -9,17 +9,16 @@ mod traits {
     }
     pub trait Monoid: SemiGroup {
         fn identity() -> Self::S;
-        fn pow<T:From<u128> + Ord + std::ops::Rem<Output = T> + Eq + std::ops::Div<Output = T> + Copy>(a:&Self::S,mut n:T) -> Self::S {
+        fn pow<T:Into<u128>>(a:&Self::S,n:T) -> Self::S {
             let mut ret = Self::identity();
             let mut mul = a.clone();
-            let zero : T = 0.into();
-            let two : T = 2.into();
-            while n > zero {
-                if n.rem(two) != zero {
+            let mut n = n.into();
+            while n > 0 {
+                if n%2 != 0 {
                     ret = Self::operator(&ret, &mul).into();
                 }
                 mul = Self::operator(&mul, &mul);
-                n = n / two;
+                n = n / 2;
             }
             ret
         }
