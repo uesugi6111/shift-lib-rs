@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate __shift_traits as traits;
+pub use self::swag::*;
 mod swag {
     use __shift_traits::SemiGroup;
 
@@ -33,7 +34,7 @@ mod swag {
         }
         fn pop(&mut self) {
             if self.front_stack.is_empty() {
-                let (x,_) = self.back_stack.pop().unwrap();
+                let (x, _) = self.back_stack.pop().unwrap();
                 self.front_stack.push(x);
                 while let Some((x, _)) = self.back_stack.pop() {
                     self.front_stack
@@ -78,6 +79,8 @@ fn t() {
     let l = 3;
     let a = vec![1, 7, 7, 4, 8, 1, 6];
     let mut swag = swag::SWAG::<S>::new(&a);
-    let ans = (0..n-l+1).map(|i| swag.query(i, i+l)).collect::<Vec<_>>();
-    assert_eq!(ans,vec![1,4,4,1,1])
+    let ans = (0..n - l + 1)
+        .map(|i| swag.query(i, i + l))
+        .collect::<Vec<_>>();
+    assert_eq!(ans, vec![1, 4, 4, 1, 1])
 }
