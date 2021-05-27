@@ -10,7 +10,7 @@ mod swag {
         right_offset: usize,
     }
     impl<'a, T: SemiGroup> SWAG<'a, T> {
-        pub fn new(a: &'a [<T as SemiGroup>::S]) -> Self {
+        pub fn new(a: &'a [T::S]) -> Self {
             SWAG {
                 data: a.iter(),
                 front_stack: Vec::new(),
