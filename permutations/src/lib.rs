@@ -90,9 +90,10 @@ mod permutations {
             if i + 1 == j {
                 vec![(i, j)]
             } else {
-                (j - 1..=i + 1)
+                (i + 1..=j - 1)
+                    .rev()
                     .chain(std::iter::once(i))
-                    .chain((j - 1..=i + 1).rev())
+                    .chain(i + 1..=j - 1)
                     .map(|i| (i, i + 1))
                     .collect::<Vec<_>>()
             }
@@ -111,5 +112,5 @@ mod permutations {
 #[test]
 fn t() {
     let perm = Permutation::new(&vec![0, 3, 2, 1]);
-    assert_eq!(perm.adj_trans_decomp(),vec![(2,3),(1,2),(2,3)]);
+    assert_eq!(perm.adj_trans_decomp(), vec![(2, 3), (1, 2), (2, 3)]);
 }
