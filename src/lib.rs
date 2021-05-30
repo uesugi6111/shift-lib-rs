@@ -7,3 +7,4 @@ pub extern crate __disjoint_sparse_table as disjoint_sparse_table;
 pub extern crate __range_set as range_set;
 pub extern crate __swag as swag;
 pub extern crate __algebraic_structures_impl as algebraic_structures_impl;
+pub extern crate __permutations as permutations;

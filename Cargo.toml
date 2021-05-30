@@ -127,6 +127,7 @@ __range_set = { package = "shift-lib-rs-range-set", version = "0.1.0", path = ".
 __swag = { package = "shift-lib-rs-swag", version = "0.1.0", path = "./swag" }
 __traits = { package = "shift-lib-rs-traits", version = "0.1.0", path = "./traits" }
 __algebraic_structures_impl = { package = "shift-lib-rs-algebraic-structures-impl", version = "0.1.0", path = "./algebraic_structures_impl" }
+__permutations = { package = "shift-lib-rs-permutations", version = "0.1.0", path = "./permutations" }
 
 [dev-dependencies]
 rand = "0.7.3"

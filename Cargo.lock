@@ -689,6 +689,7 @@ dependencies = [
  "shift-lib-rs-graph",
  "shift-lib-rs-iter-ext",
  "shift-lib-rs-math",
+ "shift-lib-rs-permutations",
  "shift-lib-rs-range-set",
  "shift-lib-rs-swag",
  "shift-lib-rs-traits",
@@ -755,6 +756,10 @@ dependencies = [
  "shift-lib-rs-iter-ext",
  "shift-lib-rs-traits",
 ]
+
+[[package]]
+name = "shift-lib-rs-permutations"
+version = "0.1.0"
 
 [[package]]
 name = "shift-lib-rs-range-set"
