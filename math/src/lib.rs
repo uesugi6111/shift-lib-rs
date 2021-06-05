@@ -69,12 +69,7 @@ mod math {
         }
         ret
     }
-
-    
-
 }
 
 #[test]
-fn t() {
-    
-}
+fn t() {}

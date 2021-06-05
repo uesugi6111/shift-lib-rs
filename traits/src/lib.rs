@@ -5,16 +5,15 @@ mod traits {
         type S: Clone;
         fn operator(a: &Self::S, b: &Self::S) -> Self::S;
     }
-    pub trait ComSemiGroup: SemiGroup {
-    }
+    pub trait ComSemiGroup: SemiGroup {}
     pub trait Monoid: SemiGroup {
         fn identity() -> Self::S;
-        fn pow<T:Into<u128>>(a:&Self::S,n:T) -> Self::S {
+        fn pow<T: Into<u128>>(a: &Self::S, n: T) -> Self::S {
             let mut ret = Self::identity();
             let mut mul = a.clone();
             let mut n = n.into();
             while n > 0 {
-                if n%2 != 0 {
+                if n % 2 != 0 {
                     ret = Self::operator(&ret, &mul).into();
                 }
                 mul = Self::operator(&mul, &mul);
@@ -23,13 +22,11 @@ mod traits {
             ret
         }
     }
-    pub trait ComMonoid: Monoid {
-    }
+    pub trait ComMonoid: Monoid {}
     pub trait Group: Monoid {
         fn inverse(a: &Self::S) -> Self::S;
     }
-    pub trait ComGroup: Group {
-    }
+    pub trait ComGroup: Group {}
     #[macro_export]
     macro_rules! impl_semigroup {
         ($wr:ident,$t:ty,$op:expr) => {
@@ -104,7 +101,7 @@ mod traits {
     /// Type,Operator,Identity
     #[macro_export]
     macro_rules! impl_monoid {
-        
+
         ($wr:ident,$t:ty,$op:expr,$id:expr) => {
             impl_semigroup!($wr,$t, $op);
             impl Monoid for $wr {
@@ -194,10 +191,7 @@ mod traits {
             }
         };
     }
-
 }
-
-
 
 #[test]
 fn impl_by_symbol() {
@@ -205,5 +199,5 @@ fn impl_by_symbol() {
     assert_eq!(S::operator(&9, &5), 14);
     impl_monoid!(M,usize,a b => a+b,0);
     let val = M(10);
-    assert_eq!(M::pow(&10,5_u32),50);
+    assert_eq!(M::pow(&10, 5_u32), 50);
 }

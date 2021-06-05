@@ -73,6 +73,6 @@ fn test() {
     assert_eq!(dst.query(3..5), 13);
     assert_eq!(dst.query(0..5), 21);
     impl_semigroup!(M,i32,a b => *a.min(b));
-    let dst = DisjointSparseTable::<M>::new(vec![2,4,4,9,4,9]);
-    assert_eq!(dst.query(0..3),2);
+    let dst = DisjointSparseTable::<M>::new(vec![2, 4, 4, 9, 4, 9]);
+    assert_eq!(dst.query(0..3), 2);
 }

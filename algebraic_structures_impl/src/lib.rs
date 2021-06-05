@@ -9,8 +9,6 @@ mod algebraic_structures_impl {
     impl_monoid!(Min<T:Ord + Bounded + Clone>,a b => a.clone().min(b.clone()),T::max_value());
     impl_monoid!(Max<T:Ord + Bounded + Clone>,a b => a.clone().max(b.clone()),T::min_value());
 
-
-
     #[derive(Clone)]
     pub struct Additive<T: Clone + Zero>(T);
     #[derive(Clone)]

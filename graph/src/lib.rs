@@ -84,7 +84,11 @@ mod graph {
             Itr: IntoIterator<Item = (I, T, C)>,
         > GeneralGraph<'_, I, T, C, Itr>
     {
-        pub fn bfs_01(&self, start: I, init: C) -> HashMap<(I, C), T, BuildHasherDefault<FxHasher>> {
+        pub fn bfs_01(
+            &self,
+            start: I,
+            init: C,
+        ) -> HashMap<(I, C), T, BuildHasherDefault<FxHasher>> {
             let mut queue = VecDeque::new();
             queue.push_back(Reverse(FirstOrd(T::zero(), (start, init))));
             let mut dist = FxHashMap::default();
@@ -174,9 +178,9 @@ mod graph {
     macro_rules! from_edges {
         ($edges:expr) => {{
             GeneralGraph {
-                next : &mut |idx: usize, _: ()| -> Vec<_> {
-                ($edges)[idx].iter().map(|&(i, c)| (i, c, ())).collect()
-            }
+                next: &mut |idx: usize, _: ()| -> Vec<_> {
+                    ($edges)[idx].iter().map(|&(i, c)| (i, c, ())).collect()
+                },
             }
         }};
     }
@@ -191,8 +195,16 @@ fn test() {
         e
     };
     let g = from_edges!(edges);
-    let res = g.dijkstra(1, ()).iter().map(|(&(a,_),&b)| (a,b)).collect::<Vec<_>>();
-    let res2 = g.bfs_01(1, ()).iter().map(|(&(a,_),&b)| (a,b)).collect::<Vec<_>>();
-    assert_eq!(res,vec![(0,2),(1,0),(2,1)]);
-    assert_eq!(res,res2);
+    let res = g
+        .dijkstra(1, ())
+        .iter()
+        .map(|(&(a, _), &b)| (a, b))
+        .collect::<Vec<_>>();
+    let res2 = g
+        .bfs_01(1, ())
+        .iter()
+        .map(|(&(a, _), &b)| (a, b))
+        .collect::<Vec<_>>();
+    assert_eq!(res, vec![(0, 2), (1, 0), (2, 1)]);
+    assert_eq!(res, res2);
 }

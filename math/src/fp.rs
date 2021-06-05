@@ -1,8 +1,11 @@
-use __iter_ext::IteratorExt;
-use __traits::{Monoid};
 use __algebraic_structures_impl::Multiplicative;
+use __iter_ext::IteratorExt;
+use __traits::Monoid;
 use num_traits::{One, PrimInt, Zero};
-use std::{marker::PhantomData, ops::{Add, AddAssign, Div, Mul, MulAssign, Neg, Sub, SubAssign}};
+use std::{
+    marker::PhantomData,
+    ops::{Add, AddAssign, Div, Mul, MulAssign, Neg, Sub, SubAssign},
+};
 pub trait Modulus: 'static + Copy + Eq {
     const MOD: u64;
 }
@@ -35,7 +38,7 @@ impl<M: Modulus> Add for Fp<M> {
     }
 }
 
-impl<M:Modulus> Sub for Fp<M> {
+impl<M: Modulus> Sub for Fp<M> {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self::Output {
         Self::new((self.val + M::MOD - rhs.val) % M::MOD)
@@ -67,7 +70,7 @@ impl<M: Modulus> One for Fp<M> {
         Self::new(1)
     }
 }
-impl<M:Modulus> Neg for Fp<M> {
+impl<M: Modulus> Neg for Fp<M> {
     type Output = Self;
 
     fn neg(self) -> Self::Output {
@@ -118,31 +121,33 @@ fn t() {
     let v = F::new(2);
     assert_eq!(v.inv().val, 500000004);
     let ut = FpUtils::<Mod1000000007>::new(100);
-    println!("{}",ut.binom(100, 50).val)
+    println!("{}", ut.binom(100, 50).val)
 }
-pub struct FpUtils<M:Modulus> {
-        fact_ : Vec<Fp<M>>,
-        inv_fact_ : Vec<Fp<M>>
+pub struct FpUtils<M: Modulus> {
+    fact_: Vec<Fp<M>>,
+    inv_fact_: Vec<Fp<M>>,
+}
+impl<M: Modulus> FpUtils<M> {
+    pub fn new(n: usize) -> Self {
+        let fact_ = (1..=n)
+            .map(Fp::new)
+            .scanl(Fp::new(1), |x, y| *x * y)
+            .collect::<Vec<_>>();
+        let mut inv_fact_ = vec![Fp::new(0); n + 1];
+        inv_fact_[n] = Fp::new(1) / fact_[n];
+        for i in (0..n).rev() {
+            inv_fact_[i] = inv_fact_[i + 1] * Fp::new(i + 1);
+        }
+        Self { fact_, inv_fact_ }
     }
-    impl<M:Modulus> FpUtils<M> {
-        pub fn new(n:usize) -> Self {
-            let fact_ = 
-            (1..=n).map(Fp::new).scanl(Fp::new(1), |x,y|*x*y).collect::<Vec<_>>();
-            let mut inv_fact_ = vec![Fp::new(0);n+1];
-            inv_fact_[n]=Fp::new(1)/fact_[n];
-            for i in (0..n).rev() {
-                inv_fact_[i] = inv_fact_[i+1]*Fp::new(i+1);
-            }
-            Self {fact_,inv_fact_}
-        }
-        pub fn fact(&self,n:usize) -> Fp<M> {
-            self.fact_[n]
-        }
-        pub fn inv_fact(&self,n:usize) -> Fp<M> {
-            self.inv_fact_[n]
-        }
-        pub fn binom(&self,n:usize,r:usize) -> Fp<M> {
-            assert!(r <= n);
-            self.fact_[n]*self.inv_fact_[r]*self.inv_fact_[n-r]
-        }
+    pub fn fact(&self, n: usize) -> Fp<M> {
+        self.fact_[n]
     }
+    pub fn inv_fact(&self, n: usize) -> Fp<M> {
+        self.inv_fact_[n]
+    }
+    pub fn binom(&self, n: usize, r: usize) -> Fp<M> {
+        assert!(r <= n);
+        self.fact_[n] * self.inv_fact_[r] * self.inv_fact_[n - r]
+    }
+}

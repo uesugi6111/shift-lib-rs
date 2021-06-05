@@ -46,7 +46,6 @@ mod general {
     }
 }
 
-
 #[test]
 fn test_output() {
     let v = [5, 2, 1, 4, 9];

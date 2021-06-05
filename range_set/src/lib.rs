@@ -1,7 +1,7 @@
 pub use self::range_set::*;
 mod range_set {
-    use std::ops::{Bound,RangeBounds};
     use std::collections::BTreeSet;
+    use std::ops::{Bound, RangeBounds};
     pub struct RangeSet {
         s: BTreeSet<(i64, i64)>,
         cnt: usize,
@@ -23,16 +23,16 @@ mod range_set {
                 x
             }
         }
-        pub fn insert<R:RangeBounds<i64>>(&mut self, range: R) {
+        pub fn insert<R: RangeBounds<i64>>(&mut self, range: R) {
             let mut l = match range.start_bound() {
                 Bound::Unbounded => std::i64::MIN,
-                Bound::Excluded(&s) => s+1,
+                Bound::Excluded(&s) => s + 1,
                 Bound::Included(&s) => s,
             };
             let mut r = match range.end_bound() {
                 Bound::Unbounded => std::i64::MAX,
                 Bound::Excluded(&t) => t,
-                Bound::Included(&t) => t+1
+                Bound::Included(&t) => t + 1,
             };
             if l >= r {
                 return;
@@ -98,16 +98,16 @@ mod range_set {
                 Some(v)
             }
         }
-        pub fn remove<R:RangeBounds<i64>>(&mut self, range: R) {
-            let  l = match range.start_bound() {
+        pub fn remove<R: RangeBounds<i64>>(&mut self, range: R) {
+            let l = match range.start_bound() {
                 Bound::Unbounded => std::i64::MIN,
-                Bound::Excluded(&s) => s+1,
+                Bound::Excluded(&s) => s + 1,
                 Bound::Included(&s) => s,
             };
-            let  r = match range.end_bound() {
+            let r = match range.end_bound() {
                 Bound::Unbounded => std::i64::MAX,
                 Bound::Excluded(&t) => t,
-                Bound::Included(&t) => t+1
+                Bound::Included(&t) => t + 1,
             };
             if let Some(&(l1, r1)) = self.prev((l, std::i64::MAX)) {
                 // l1 <= l
@@ -126,27 +126,26 @@ mod range_set {
         pub fn count(&self) -> usize {
             self.cnt
         }
-        pub fn inner_set(&self) -> &BTreeSet<(i64,i64)> {
+        pub fn inner_set(&self) -> &BTreeSet<(i64, i64)> {
             &self.s
         }
     }
 }
 #[test]
-fn t(){
+fn t() {
     let mut rs = RangeSet::new();
     rs.insert(0..10);
     // 0..10
     rs.insert(5..11);
     // 0..11
-    assert_eq!(rs.count(),11);
-    assert_eq!(rs.mex(6),11);
+    assert_eq!(rs.count(), 11);
+    assert_eq!(rs.mex(6), 11);
     rs.remove(2..8);
     // 0..2,8..11
-    assert_eq!(rs.count(),5);
-    assert_eq!(rs.mex(0),2);
+    assert_eq!(rs.count(), 5);
+    assert_eq!(rs.mex(0), 2);
     rs.insert(-1..=6);
     // -1..7,8..11
-    assert_eq!(rs.count(),11);
-    assert_eq!(rs.mex(11),11);
-
+    assert_eq!(rs.count(), 11);
+    assert_eq!(rs.mex(11), 11);
 }
