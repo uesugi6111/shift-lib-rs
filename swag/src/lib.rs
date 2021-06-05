@@ -53,11 +53,11 @@ mod swag {
             for _ in 0..l {
                 self.pop();
             }
-            match (self.front_stack.last(),self.back_stack.last()) {
-                (Some(f_last),Some((_,b_last))) => T::operator(f_last, b_last),
-                (Some(f_last),_) => f_last.clone(),
-                (_,Some((_,b_last))) => b_last.clone(),
-                _ => unreachable!()
+            match (self.front_stack.last(), self.back_stack.last()) {
+                (Some(f_last), Some((_, b_last))) => T::operator(f_last, b_last),
+                (Some(f_last), _) => f_last.clone(),
+                (_, Some((_, b_last))) => b_last.clone(),
+                _ => unreachable!(),
             }
         }
     }
