@@ -29,6 +29,7 @@ mod swag {
                     T::operator(&self.back_stack.last().unwrap().1, val),
                 ))
             }
+            self.right_offset += 1;
         }
         fn pop(&mut self) {
             if self.front_stack.is_empty() {
@@ -40,6 +41,7 @@ mod swag {
                 }
             }
             self.front_stack.pop();
+            self.left_offset += 1;
         }
         pub fn query(&mut self, l: usize, r: usize) -> T::S {
             assert!(self.left_offset <= l && self.right_offset <= r && l <= r);
@@ -51,19 +53,11 @@ mod swag {
             for _ in 0..l {
                 self.pop();
             }
-            self.left_offset += l;
-            self.right_offset += r;
-            if self.front_stack.is_empty() {
-                self.back_stack.last().unwrap().clone().1
-            } else {
-                if self.back_stack.is_empty() {
-                    self.front_stack.last().unwrap().clone()
-                } else {
-                    T::operator(
-                        self.front_stack.last().unwrap(),
-                        &self.back_stack.last().unwrap().1,
-                    )
-                }
+            match (self.front_stack.last(),self.back_stack.last()) {
+                (Some(f_last),Some((_,b_last))) => T::operator(f_last, b_last),
+                (Some(f_last),_) => f_last.clone(),
+                (_,Some((_,b_last))) => b_last.clone(),
+                _ => unreachable!()
             }
         }
     }
