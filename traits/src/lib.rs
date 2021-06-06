@@ -23,7 +23,7 @@ mod traits {
     /// # Laws
     // ```{.text}
     /// (Semigroup laws),
-    /// 
+    ///
     /// ∀ a ∈ Self, a * e = e * a = a
     /// ```
     pub trait Monoid: SemiGroup {

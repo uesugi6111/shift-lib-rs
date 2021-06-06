@@ -45,7 +45,7 @@ mod swag {
             self.front_stack.pop();
             self.left_offset += 1;
         }
-        pub fn query<R:RangeBounds<usize>>(&mut self,range:R) -> T::S {
+        pub fn query<R: RangeBounds<usize>>(&mut self, range: R) -> T::S {
             let l = match range.start_bound() {
                 Bound::Unbounded => 0,
                 Bound::Excluded(&s) => s + 1,
@@ -55,7 +55,7 @@ mod swag {
                 Bound::Unbounded => self.data.len(),
                 Bound::Excluded(&t) => t,
                 Bound::Included(&t) => t + 1,
-            } ;
+            };
             assert!(self.left_offset <= l && self.right_offset <= r && l <= r);
             let l = l - self.left_offset;
             let r = r - self.right_offset;

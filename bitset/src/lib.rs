@@ -1,9 +1,7 @@
-
-
 pub use self::bitset::*;
 
 mod bitset {
-    
+
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct Bitset(pub usize);
     pub struct BitsetRangeIter {

@@ -7,4 +7,5 @@ pub extern crate __iter_ext as iter_ext;
 pub extern crate __math as math;
 pub extern crate __permutations as permutations;
 pub extern crate __range_set as range_set;
+pub extern crate __segment_tree as segment_tree;
 pub extern crate __swag as swag;
