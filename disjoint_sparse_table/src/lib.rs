@@ -2,6 +2,8 @@ pub use self::disjoint_sparse_table::*;
 #[macro_use]
 extern crate __traits as traits;
 mod disjoint_sparse_table {
+    use std::ops::{Bound, RangeBounds};
+
     use __traits::SemiGroup;
 
     extern crate __general as general;
@@ -45,9 +47,18 @@ mod disjoint_sparse_table {
             }
             Self { table }
         }
-        pub fn query(&self, range: std::ops::Range<usize>) -> T::S {
-            let l = range.start;
-            let r = range.end - 1;
+        pub fn query<R: RangeBounds<usize>>(&self, range: R) -> T::S {
+            let l = match range.start_bound() {
+                Bound::Unbounded => 0,
+                Bound::Excluded(&s) => s + 1,
+                Bound::Included(&s) => s,
+            };
+            let r = match range.end_bound() {
+                Bound::Unbounded => self.table[0].len(),
+                Bound::Excluded(&t) => t,
+                Bound::Included(&t) => t + 1,
+            } - 1;
+
             unsafe {
                 if l == r {
                     self.table.get_unchecked(0).get_unchecked(l).clone()
@@ -69,9 +80,13 @@ fn test() {
     impl_semigroup!(S,i32,a b => a+b);
     let dst = DisjointSparseTable::<S>::new(vec![5, 2, 1, 4, 9]);
     assert_eq!(dst.query(0..3), 8);
+    assert_eq!(dst.query(..3), 8);
     assert_eq!(dst.query(2..5), 14);
     assert_eq!(dst.query(3..5), 13);
+    assert_eq!(dst.query(3..), 13);
+    assert_eq!(dst.query(2..4), 5);
     assert_eq!(dst.query(0..5), 21);
+    assert_eq!(dst.query(..), 21);
     impl_semigroup!(M,i32,a b => *a.min(b));
     let dst = DisjointSparseTable::<M>::new(vec![2, 4, 4, 9, 4, 9]);
     assert_eq!(dst.query(0..3), 2);

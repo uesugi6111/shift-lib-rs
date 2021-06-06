@@ -1,9 +1,9 @@
-use std::ops::Range;
+
 
 pub use self::bitset::*;
 
 mod bitset {
-    use std::ops::Range;
+    
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct Bitset(pub usize);
     pub struct BitsetRangeIter {

@@ -1,11 +1,31 @@
 pub use self::traits::*;
 
 mod traits {
+    // Semigroup trait
+    /// # Laws
+    ///
+    /// ```{.text}
+    /// ∀ a,b,c ∈ Self, a * (b * c) = (a * b) * c
+    /// ```
     pub trait SemiGroup {
         type S: Clone;
         fn operator(a: &Self::S, b: &Self::S) -> Self::S;
     }
+    /// Commutative semigroup trait
+    ///
+    /// # Laws
+    // ```{.text}
+    /// ∀ a,b ∈ Self, a * b = b * a
+    /// ```
     pub trait ComSemiGroup: SemiGroup {}
+    /// Monoid trait
+    ///
+    /// # Laws
+    // ```{.text}
+    /// (Semigroup laws),
+    /// 
+    /// ∀ a ∈ Self, a * e = e * a = a
+    /// ```
     pub trait Monoid: SemiGroup {
         fn identity() -> Self::S;
         fn pow<T: Into<u128>>(a: &Self::S, n: T) -> Self::S {
@@ -22,10 +42,28 @@ mod traits {
             ret
         }
     }
+    /// Commutative monoid trait
+    ///
+    /// # Laws
+    // ```{.text}
+    /// (Monoid laws),
+    ///
+    /// ∀ a,b ∈ Self, a * b = b * a
+    /// ```
     pub trait ComMonoid: Monoid {}
+
+    /// Group trait
+    ///
+    /// # Laws
+    // ```{.text}
+    /// (Monoid laws),
+    ///
+    /// ∀ a ∈ Self, ∃ b ∈ Self, a * b = b * a = e
+    /// ```
     pub trait Group: Monoid {
         fn inverse(a: &Self::S) -> Self::S;
     }
+    /// Commutative group trait
     pub trait ComGroup: Group {}
     #[macro_export]
     macro_rules! impl_semigroup {

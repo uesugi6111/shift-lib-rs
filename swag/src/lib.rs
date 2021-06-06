@@ -1,5 +1,7 @@
 pub use self::swag::*;
 mod swag {
+    use std::ops::{Bound, RangeBounds};
+
     use __traits::SemiGroup;
 
     pub struct SWAG<'a, T: SemiGroup> {
@@ -43,7 +45,17 @@ mod swag {
             self.front_stack.pop();
             self.left_offset += 1;
         }
-        pub fn query(&mut self, l: usize, r: usize) -> T::S {
+        pub fn query<R:RangeBounds<usize>>(&mut self,range:R) -> T::S {
+            let l = match range.start_bound() {
+                Bound::Unbounded => 0,
+                Bound::Excluded(&s) => s + 1,
+                Bound::Included(&s) => s,
+            };
+            let r = match range.end_bound() {
+                Bound::Unbounded => self.data.len(),
+                Bound::Excluded(&t) => t,
+                Bound::Included(&t) => t + 1,
+            } ;
             assert!(self.left_offset <= l && self.right_offset <= r && l <= r);
             let l = l - self.left_offset;
             let r = r - self.right_offset;

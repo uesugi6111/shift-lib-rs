@@ -6,7 +6,7 @@ mod graph {
         cmp::Reverse,
         collections::{BinaryHeap, HashMap, VecDeque},
         hash::{BuildHasherDefault, Hash},
-        ops::{Add, Sub},
+        ops::Add,
     };
 
     use num_traits::{One, Zero};
