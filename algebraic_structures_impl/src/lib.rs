@@ -20,7 +20,7 @@ mod algebraic_structures_impl {
             T::min_value()
         }
     }
-    
+
     #[derive(Clone)]
     pub struct Additive<T: Clone + Zero>(T);
     #[derive(Clone)]
@@ -32,6 +32,7 @@ mod algebraic_structures_impl {
             a.clone().neg()
         }
     }
+    impl<T: Clone + Zero> ComMonoid for Additive<T> {}
     impl<T: Clone + Zero + Neg<Output = T>> ComGroup for Additive<T> {}
 }
 
