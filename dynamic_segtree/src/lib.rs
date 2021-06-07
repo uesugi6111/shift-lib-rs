@@ -23,14 +23,15 @@ mod dynamic_segtree {
         size: usize,
         root: Option<Box<Node<T>>>,
     }
+    
     impl<T: Monoid> DynamicSegtree<T> {
         pub fn new(size: usize) -> Self {
             DynamicSegtree { root: None, size }
         }
-        pub fn insert(&mut self, idx: usize, value: &T::S) {
-            Self::set(&mut self.root, 0, self.size, idx, value);
+        pub fn set(&mut self, idx: usize, value: &T::S) {
+            Self::_set(&mut self.root, 0, self.size, idx, value);
         }
-        fn set(root: &mut Option<Box<Node<T>>>, a: usize, b: usize, idx: usize, value: &T::S) {
+        fn _set(root: &mut Option<Box<Node<T>>>, a: usize, b: usize, idx: usize, value: &T::S) {
             if root.is_none() {
                 *root = Some(Box::new(Node::new(T::identity())));
             }
@@ -40,9 +41,9 @@ mod dynamic_segtree {
             } else {
                 let mid = (a + b) / 2;
                 if idx < mid {
-                    Self::set(&mut root.left, a, mid, idx, value);
+                    Self::_set(&mut root.left, a, mid, idx, value);
                 } else {
-                    Self::set(&mut root.right, mid, b, idx, value);
+                    Self::_set(&mut root.right, mid, b, idx, value);
                 }
                 let left = &root.as_ref().left;
                 let right = &root.as_ref().right;
@@ -90,9 +91,9 @@ fn test() {
 
     impl_monoid!(T,i32,a b => a+b,0);
     let mut seg = DynamicSegtree::<T>::new(10_usize.pow(9));
-    seg.insert(2, &10);
-    seg.insert(3, &100);
-    seg.insert(10_usize.pow(8), &1);
+    seg.set(2, &10);
+    seg.set(3, &100);
+    seg.set(10_usize.pow(8), &1);
     assert_eq!(seg.query(..),111);
     assert_eq!(seg.query(10..),1);
     assert_eq!(seg.query(0..5),110);
