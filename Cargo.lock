@@ -685,6 +685,7 @@ dependencies = [
  "shift-lib-rs-algebraic-structures-impl",
  "shift-lib-rs-bitset",
  "shift-lib-rs-disjoint-sparse-table",
+ "shift-lib-rs-dynamic-segtree",
  "shift-lib-rs-general",
  "shift-lib-rs-graph",
  "shift-lib-rs-iter-ext",
@@ -724,6 +725,13 @@ version = "0.1.0"
 dependencies = [
  "num-traits",
  "shift-lib-rs-general",
+ "shift-lib-rs-traits",
+]
+
+[[package]]
+name = "shift-lib-rs-dynamic-segtree"
+version = "0.1.0"
+dependencies = [
  "shift-lib-rs-traits",
 ]
 
@@ -770,7 +778,6 @@ version = "0.1.0"
 name = "shift-lib-rs-segment-tree"
 version = "0.1.0"
 dependencies = [
- "num-traits",
  "shift-lib-rs-general",
  "shift-lib-rs-traits",
 ]
