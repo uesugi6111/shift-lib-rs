@@ -63,6 +63,25 @@ mod traits {
     pub trait Group: Monoid {
         fn inverse(a: &Self::S) -> Self::S;
     }
+
+    impl<T: SemiGroup> SemiGroup for Option<T> {
+        type S = Option<T::S>;
+        fn operator(a: &Self::S, b: &Self::S) -> Self::S {
+            match (a, b) {
+                (None, None) => None,
+                (Some(a), None) => Some(a.clone()),
+                (None, Some(b)) => Some(b.clone()),
+                (Some(a), Some(b)) => Some(T::operator(a, b)),
+            }
+        }
+    }
+
+    impl<T: SemiGroup> Monoid for Option<T> {
+        fn identity() -> Self::S {
+            None
+        }
+    }
+
     /// Commutative group trait
     pub trait ComGroup: Group {}
     #[macro_export]
