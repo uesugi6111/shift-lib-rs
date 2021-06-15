@@ -1,6 +1,5 @@
 pub use self::dynamic_segtree::*;
-#[macro_use]
-extern crate __traits as traits;
+
 mod dynamic_segtree {
     use std::ops::{Bound, RangeBounds};
 
@@ -83,18 +82,4 @@ mod dynamic_segtree {
             }
         }
     }
-}
-
-#[test]
-fn test() {
-    use __traits::{Monoid, SemiGroup};
-
-    impl_monoid!(T,i32,a b => a+b,0);
-    let mut seg = DynamicSegtree::<T>::new(10_usize.pow(9));
-    seg.set(2, &10);
-    seg.set(3, &100);
-    seg.set(10_usize.pow(8), &1);
-    assert_eq!(seg.query(..),111);
-    assert_eq!(seg.query(10..),1);
-    assert_eq!(seg.query(0..5),110);
 }
