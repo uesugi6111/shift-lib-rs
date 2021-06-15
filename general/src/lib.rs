@@ -1,6 +1,11 @@
 pub use self::general::*;
 
 mod general {
+    use std::{
+        io::empty,
+        ops::{Range, RangeBounds},
+    };
+
     #[macro_export]
     macro_rules! max_assign {
         ($left:expr,$right:expr) => {
@@ -44,6 +49,41 @@ mod general {
                 .join(" ")
         );
     }
+    pub fn binary_search<R: RangeBounds<i64>, F: Fn(i64) -> bool>(range: R, f: F) -> Range<i64> {
+    let mut ok = match range.start_bound() {
+        std::ops::Bound::Included(l) => *l,
+        std::ops::Bound::Excluded(l) => l + 1,
+        std::ops::Bound::Unbounded => std::i64::MIN,
+    };
+    let mut ng = match range.end_bound() {
+        std::ops::Bound::Included(r) => r + 1,
+        std::ops::Bound::Excluded(r) => *r,
+        std::ops::Bound::Unbounded => std::i64::MAX,
+    };
+    if !f(ok) && !f(ng) {
+        return 0..0;
+    }
+    if !f(ok) {
+        std::mem::swap(&mut ok, &mut ng);
+    }
+    while (ok > ng && ok - ng > 1) || (ok < ng && ng - ok > 1) {
+        let mid = if ok > ng {
+            ok + (ng - ok) / 2
+        } else {
+            ng + (ok - ng) / 2
+        };
+        if f(mid) {
+            ok = mid;
+        } else {
+            ng = mid;
+        }
+    }
+    if ok < ng {
+        ok..ng
+    } else {
+        ng + 1..ok + 1
+    }
+}
 }
 
 #[test]
