@@ -1,10 +1,8 @@
-#[macro_use]
-extern crate __traits as _;
+
 pub use self::algebraic_structures_impl::*;
 mod algebraic_structures_impl {
     use std::ops::Neg;
-
-    use __traits::*;
+    use __traits::{ComGroup, ComMonoid, Group, Monoid, SemiGroup, impl_monoid, impl_semigroup};
     
     use num_traits::{Bounded, One, Zero};
     #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
